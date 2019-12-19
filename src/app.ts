@@ -12,7 +12,7 @@ const createWindow = () => {
     // }
   });
 
-  window.loadFile(path.join(__dirname, "../index.html"));
+  window.loadFile(path.join(__dirname, "../src/index.html"));
 
   window.on("closed", () => {
     window = null;
