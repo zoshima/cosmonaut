@@ -12,58 +12,31 @@
       content="default-src 'self'; script-src 'self'"
     />
 
-    <link
-      rel="stylesheet"
-      href="../node_modules/material-design-icons/iconfont/material-icons.css"
-    />
-    <link
-      rel="stylesheet"
-      href="../node_modules/material-design-lite/dist/material.indigo-cyan.min.css"
-    />
-    <script
-      defer
-      src="../node_modules/material-design-lite/dist/material.min.js"
-    ></script>
-
     <link rel="stylesheet" href="./assets/css/preferences.css" />
 
     <title>Preferences</title>
   </head>
   <body>
-    <form action="#">
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input
-          class="mdl-textfield__input"
-          type="text"
-          id="hostname_input"
-          value="localhost"
-        />
-        <label class="mdl-textfield__label" for="hostname_input"
-          >Hostname</label
-        >
-      </div>
+    <section>
+      <form>
+        <label for="hostname_input">Hostname</label>
+        <input type="text" id="hostname_input" value="localhost" />
 
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <label for="key_input">Key</label>
         <input
-          class="mdl-textfield__input"
           type="text"
           id="key_input"
           value="C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="
         />
-        <label class="mdl-textfield__label" for="key_input">Key</label>
-      </div>
 
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <label for="port_input">Port</label>
         <input
-          class="mdl-textfield__input"
           type="text"
           pattern="[1-9]{1}[0-9]*"
           id="port_input"
           value="8902"
         />
-        <label class="mdl-textfield__label" for="port_input">Port</label>
-        <span class="mdl-textfield__error">Invalid port</span>
-      </div>
-    </form>
+      </form>
+    </section>
   </body>
 </html>
