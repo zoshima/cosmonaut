@@ -14,7 +14,7 @@ const createMainWindow = () => {
     // }
   });
 
-  mainWindow.loadFile(path.join(__dirname, "../src/index.html"));
+  mainWindow.loadFile(path.join(__dirname, "../src/windows/index/index.html"));
 
   mainWindow.on("closed", () => {
     mainWindow = null;
@@ -76,7 +76,9 @@ const createPreferencesWindow = () => {
     resizable: false
   });
 
-  preferencesWindow.loadFile(path.join(__dirname, "../src/preferences.html"));
+  preferencesWindow.loadFile(
+    path.join(__dirname, "../src/windows/preferences/preferences.html")
+  );
 
   preferencesWindow.on("closed", () => {
     preferencesWindow = null;
