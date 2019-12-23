@@ -14,7 +14,7 @@ const createMainWindow = () => {
     // }
   });
 
-  mainWindow.loadFile(path.join(__dirname, "../src/windows/index/index.html"));
+  mainWindow.loadFile("index.html");
 
   mainWindow.on("closed", () => {
     mainWindow = null;
@@ -26,6 +26,7 @@ const createMainWindow = () => {
       submenu: [
         {
           label: "Preferences",
+          accelerator: "CmdOrCtrl+,",
           click: () => {
             createPreferencesWindow();
           }
@@ -34,7 +35,15 @@ const createMainWindow = () => {
           type: "separator"
         },
         {
+          label: "Close Window",
+          accelerator: "CmdOrCtrl+W",
+          click: (_: any, window: BrowserWindow) => {
+            window.close();
+          }
+        },
+        {
           label: "Quit Cosmonaut",
+          accelerator: "CmdOrCtrl+Q",
           click: () => {
             app.quit();
           }
@@ -54,6 +63,16 @@ const createMainWindow = () => {
           label: "Select All",
           accelerator: "CmdOrCtrl+A",
           selector: "selectAll:"
+        }
+      ]
+    },
+    {
+      label: "Developer",
+      submenu: [
+        {
+          label: "Toggle Developer Tools",
+          accelerator: "CmdOrCtrl+I",
+          role: "toggleDevTools"
         }
       ]
     }
@@ -77,7 +96,7 @@ const createPreferencesWindow = () => {
   });
 
   preferencesWindow.loadFile(
-    path.join(__dirname, "../src/windows/preferences/preferences.html")
+    path.join(__dirname, "./windows/preferences/preferences.html")
   );
 
   preferencesWindow.on("closed", () => {
