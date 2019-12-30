@@ -25,13 +25,6 @@ const createMainWindow = () => {
       label: "Application",
       submenu: [
         {
-          label: "Preferences",
-          accelerator: "CmdOrCtrl+,",
-          click: () => {
-            createPreferencesWindow();
-          }
-        },
-        {
           type: "separator"
         },
         {
@@ -79,29 +72,6 @@ const createMainWindow = () => {
   ];
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(menu));
-};
-
-const createPreferencesWindow = () => {
-  if (preferencesWindow) {
-    preferencesWindow.focus();
-
-    return;
-  }
-
-  preferencesWindow = new BrowserWindow({
-    title: "Preferences",
-    width: 400,
-    height: 400,
-    resizable: false
-  });
-
-  preferencesWindow.loadFile(
-    path.join(__dirname, "./windows/preferences/preferences.html")
-  );
-
-  preferencesWindow.on("closed", () => {
-    preferencesWindow = null;
-  });
 };
 
 app.on("ready", createMainWindow);
