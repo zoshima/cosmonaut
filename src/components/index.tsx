@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Hello } from "./hello";
 
-const Index = () => {
+const Index = (): JSX.Element => {
   return <Hello name="World"/>;
 };
 
