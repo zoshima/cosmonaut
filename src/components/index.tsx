@@ -1,9 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Hello } from "./hello";
+import App from "./App";
 
 const Index = (): JSX.Element => {
-  return <Hello name="World"/>;
+  return <App />;
 };
 
 ReactDOM.render(<Index />, document.getElementById("root"));

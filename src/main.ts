@@ -1,8 +1,6 @@
 import { app, BrowserWindow, Menu } from "electron";
-import path from "path";
 
 let mainWindow: BrowserWindow;
-let preferencesWindow: BrowserWindow;
 
 const createMainWindow = () => {
   mainWindow = new BrowserWindow({
