@@ -1,15 +1,28 @@
 import React from "react";
-import { FormControl, Select, InputLabel, MenuItem } from "@material-ui/core";
+import {
+  FormControl,
+  Select,
+  InputLabel,
+  MenuItem,
+  makeStyles
+} from "@material-ui/core";
 
 interface DatabaseSelectProps {
   databases: string[];
   selectDatabase: (selectedDatabase: string) => void;
 }
 
+const useStyles: any = makeStyles({
+  formControl: {
+    width: "100%"
+  }
+});
+
 const DatabaseSelect: React.FC<DatabaseSelectProps> = ({
   databases,
   selectDatabase
 }) => {
+  const classes: any = useStyles();
   const onChange = (event: React.ChangeEvent<{ value: number }>): void => {
     const index: number = Number(event.target.value);
 
@@ -17,7 +30,7 @@ const DatabaseSelect: React.FC<DatabaseSelectProps> = ({
   };
 
   return (
-    <FormControl>
+    <FormControl className={classes.formControl}>
       <InputLabel id="database-input-label">Database</InputLabel>
       <Select
         labelId="database-input-label"

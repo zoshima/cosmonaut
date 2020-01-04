@@ -1,12 +1,12 @@
 import * as fs from "fs";
 
-export interface Settings {
+export interface AppSettings {
   database: { endpoint: string; key: string };
 }
 
 export class Environment {
   private static _instance: Environment;
-  private _settings: Settings;
+  private _settings: AppSettings;
 
   constructor() {
     const settings: string = fs.readFileSync("appsettings.json", "utf8");
@@ -22,7 +22,7 @@ export class Environment {
     return this._instance;
   }
 
-  public get settings(): Settings {
+  public get settings(): AppSettings {
     return this._settings;
   }
 }
