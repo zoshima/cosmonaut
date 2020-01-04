@@ -1,10 +1,9 @@
 import React from "react";
 import { FormControl, Select, InputLabel, MenuItem } from "@material-ui/core";
-import { Database } from "@azure/cosmos";
 
 interface DatabaseSelectProps {
-  databases: Database[];
-  selectDatabase: (selectedDatabase: Database) => void;
+  databases: string[];
+  selectDatabase: (selectedDatabase: string) => void;
 }
 
 const DatabaseSelect: React.FC<DatabaseSelectProps> = ({
@@ -26,10 +25,10 @@ const DatabaseSelect: React.FC<DatabaseSelectProps> = ({
         onChange={onChange}
         value=""
       >
-        {databases.map((database: Database, index: number) => {
+        {databases.map((database: string, index: number) => {
           return (
-            <MenuItem key={database.id} value={index}>
-              {database.id}
+            <MenuItem key={database} value={index}>
+              {database}
             </MenuItem>
           );
         })}

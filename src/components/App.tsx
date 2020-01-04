@@ -1,22 +1,27 @@
 import * as React from "react";
-import { Database } from "@azure/cosmos";
 import DatabaseSelect from "./DatabaseSelect";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { CosmosClient } from "../cosmos/cosmos-client";
+import { Environment, Settings } from "../environment";
 
-const databases: Database[] = [
-  {
-    id: "cosdb-kdi-01"
-  } as Database,
-  {
-    id: "cosdb-kdi-02"
-  } as Database
-];
+const settings: Settings = Environment.instance.settings;
+const cosmosClient: CosmosClient = new CosmosClient(
+  settings.database.endpoint,
+  settings.database.key
+);
 
 const App: React.FC = () => {
-  const [database, setDatabase] = useState();
+  const [database, setDatabase] = useState(null);
+  const [databases, setDatabases] = useState([]);
 
-  const selectDatabase = (selectedDatabase: Database): void => {
-    if (selectedDatabase.id === database?.id) {
+  useEffect(() => {
+    cosmosClient.getDatabases().then((databases: string[]) => {
+      setDatabases(databases);
+    });
+  });
+
+  const selectDatabase = (selectedDatabase: string): void => {
+    if (selectedDatabase === database?.id) {
       return;
     }
 

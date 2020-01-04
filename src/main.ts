@@ -4,6 +4,9 @@ let mainWindow: BrowserWindow;
 
 const createMainWindow = () => {
   mainWindow = new BrowserWindow({
+    webPreferences: {
+      nodeIntegration: true
+    },
     title: "Cosmonaut",
     width: 800,
     height: 800
