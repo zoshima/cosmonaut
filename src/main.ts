@@ -97,8 +97,6 @@ app.on("activate", () => {
   }
 });
 
-// let timeout: NodeJS.Timeout;
-
 fs.watch("./dist", (_event: string, filename: string) => {
   if (filename === "index.js") {
     mainWindow.reload();
