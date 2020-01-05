@@ -1,4 +1,5 @@
 import { app, BrowserWindow, Menu } from "electron";
+import fs from "fs";
 
 let mainWindow: BrowserWindow;
 
@@ -25,6 +26,13 @@ const createMainWindow = () => {
     {
       label: "Application",
       submenu: [
+        {
+          label: "Reload",
+          accelerator: "CmdOrCtrl+R",
+          click: (_: any, window: BrowserWindow) => {
+            window.reload();
+          }
+        },
         {
           type: "separator"
         },
@@ -86,5 +94,13 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
   if (mainWindow === null) {
     createMainWindow();
+  }
+});
+
+// let timeout: NodeJS.Timeout;
+
+fs.watch("./dist", (_event: string, filename: string) => {
+  if (filename === "index.js") {
+    mainWindow.reload();
   }
 });
