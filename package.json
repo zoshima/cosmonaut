@@ -4,7 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "webpack && electron ./dist/main.js"
+    "start": "webpack && electron ./dist/main.js",
+    "serve": "webpack --watch && electron ./dist/main.js"
   },
   "author": "",
   "license": "ISC",

@@ -30,7 +30,7 @@ const Settings: React.FC<SettingsProps> = ({ cosmosClient }) => {
     cosmosClient.getDatabases().then((databases: string[]) => {
       setDatabases(databases);
     });
-  });
+  }, []);
 
   const selectDatabase = async (selectedDatabaseId: string): Promise<void> => {
     if (selectedDatabaseId === databaseClient?.id) {

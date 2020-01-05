@@ -8,7 +8,7 @@ const createMainWindow = () => {
       nodeIntegration: true
     },
     title: "Cosmonaut",
-    width: 800,
+    width: 1000,
     height: 800
     // webPreferences: {
     //   preload: path.join(__dirname, "preload.js")
@@ -73,6 +73,8 @@ const createMainWindow = () => {
   ];
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(menu));
+
+  mainWindow.webContents.toggleDevTools();
 };
 
 app.on("ready", createMainWindow);

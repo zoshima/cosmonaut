@@ -1,7 +1,6 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = [
-
   // ts (electron)
   {
     mode: "development",
@@ -11,25 +10,14 @@ module.exports = [
       rules: [
         {
           test: /\.ts$/,
-          exclude: /node_modules/,
-          use: [
-            {
-              loader: "ts-loader"
-            }
-          ]
+          include: /src/,
+          use: [ { loader: "ts-loader" } ]
         }
       ]
     },
     output: {
       path: __dirname + "/dist",
       filename: "main.js"
-    },
-    resolve: {
-      extensions: [".ts"]
-    },
-    externals: {
-      "react": "React",
-      "react-dom": "ReactDOM"
     }
   },
 
@@ -43,11 +31,7 @@ module.exports = [
         {
           test: /\.ts(x?)$/,
           include: /src/,
-          use: [
-            { 
-              loader: 'ts-loader' 
-            }
-          ]
+          use: [ { loader: 'ts-loader' } ]
         }
       ] 
     },
@@ -62,6 +46,7 @@ module.exports = [
       new HtmlWebpackPlugin({
         template: './index.html'
       })
-    ]
+    ],
+    externals: ['utf-8-validate', 'bufferutil']
   }
 ];
