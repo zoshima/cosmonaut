@@ -14,19 +14,20 @@ export class GremlinClientFactory {
   }
 
   public async createClient(
-    collectionId: string,
+    containerId: string,
     openConnection: boolean = true
   ): Promise<GremlinClient> {
-    if (this.clients[collectionId]) {
-      return this.clients[collectionId];
+    if (this.clients[containerId]) {
+      return this.clients[containerId];
     }
 
     const authenticator: driver.auth.PlainTextSaslAuthenticator = new driver.auth.PlainTextSaslAuthenticator(
-      `/dbs/${this.databaseName}/colls/${collectionId}`,
+      `/dbs/${this.databaseName}/colls/${containerId}`,
       this.key
     );
 
     const connection: GremlinClient = new GremlinClient(
+      containerId,
       authenticator,
       this.endpoint
     );
@@ -35,7 +36,7 @@ export class GremlinClientFactory {
       await connection.open();
     }
 
-    this.clients[collectionId] = connection;
+    this.clients[containerId] = connection;
 
     return connection;
   }
@@ -53,14 +54,20 @@ export class GremlinClientFactory {
 
 export class GremlinClient {
   private client: driver.Client;
+  private _containerId: string;
 
-  constructor(authenticator: any, endpoint: string) {
+  constructor(containerId: string, authenticator: any, endpoint: string) {
+    this._containerId = containerId;
     this.client = new driver.Client(endpoint, {
       authenticator,
       traversalsource: "g",
       rejectUnauthorized: true,
       mimeType: "application/vnd.gremlin-v2.0+json"
     });
+  }
+
+  public get containerId(): string {
+    return this._containerId;
   }
 
   public async open(): Promise<void> {

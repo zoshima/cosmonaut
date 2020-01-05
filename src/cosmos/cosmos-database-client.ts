@@ -21,6 +21,10 @@ export class CosmosDatabaseClient {
     this.database = client.database(databaseName);
   }
 
+  public get id(): string {
+    return this.database.id;
+  }
+
   public async deleteContainer(containerId: string): Promise<void> {
     await this.database.container(containerId).delete();
   }

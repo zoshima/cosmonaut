@@ -7,9 +7,9 @@ import {
   makeStyles
 } from "@material-ui/core";
 
-interface DatabaseSelectProps {
-  databases: string[];
-  selectDatabase: (selectedDatabase: string) => void;
+interface ContainerSelectProps {
+  containers: string[];
+  selectContainer: (selectedContainer: string) => void;
 }
 
 const useStyles: any = makeStyles({
@@ -18,32 +18,33 @@ const useStyles: any = makeStyles({
   }
 });
 
-const DatabaseSelect: React.FC<DatabaseSelectProps> = ({
-  databases,
-  selectDatabase
+const ContainerSelect: React.FC<ContainerSelectProps> = ({
+  containers,
+  selectContainer
 }) => {
   const classes: any = useStyles();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const onChange = (event: React.ChangeEvent<{ value: number }>): void => {
     const index: number = Number(event.target.value);
 
-    selectDatabase(databases[index]);
+    selectContainer(containers[index]);
     setSelectedIndex(index);
   };
 
   return (
     <FormControl className={classes.formControl}>
-      <InputLabel id="database-input-label">Database</InputLabel>
+      <InputLabel id="container-input-label">Container</InputLabel>
       <Select
-        labelId="database-input-label"
-        id="database-select"
+        labelId="container-input-label"
+        id="container-select"
         onChange={onChange}
         value={selectedIndex}
+        disabled={!containers.length}
       >
-        {databases.map((database: string, index: number) => {
+        {containers.map((container: string, index: number) => {
           return (
-            <MenuItem key={database} value={index}>
-              {database}
+            <MenuItem key={container} value={index}>
+              {container}
             </MenuItem>
           );
         })}
@@ -52,4 +53,4 @@ const DatabaseSelect: React.FC<DatabaseSelectProps> = ({
   );
 };
 
-export default DatabaseSelect;
+export default ContainerSelect;

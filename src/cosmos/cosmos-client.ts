@@ -8,14 +8,27 @@ import {
 
 export class CosmosClient {
   private client: AzureCosmosClient;
+  private _endpoint: string;
+  private _key: string;
 
   constructor(endpoint: string, key: string) {
+    this._endpoint = endpoint;
+    this._key = key;
+
     const clientOptions: CosmosClientOptions = {
       endpoint: endpoint,
       key: key
     };
 
     this.client = new AzureCosmosClient(clientOptions);
+  }
+
+  public get endpoint(): string {
+    return this._endpoint;
+  }
+
+  public get key(): string {
+    return this._key;
   }
 
   public async getDatabases(): Promise<string[]> {
