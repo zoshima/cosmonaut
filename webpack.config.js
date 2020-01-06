@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = [
   // ts (electron)
@@ -32,6 +33,14 @@ module.exports = [
           test: /\.ts(x?)$/,
           include: /src/,
           use: [ { loader: 'ts-loader' } ]
+        },
+        {
+          test: /\.css$/,
+          use: ["style-loader", "css-loader"]
+        },
+        {
+          test: /\.ttf$/,
+          use: ['file-loader']
         }
       ] 
     },
@@ -45,6 +54,9 @@ module.exports = [
     plugins: [
       new HtmlWebpackPlugin({
         template: './index.html'
+      }),
+      new MonacoWebpackPlugin({
+        languages: ["json", "groovy"]
       })
     ],
     externals: ['utf-8-validate', 'bufferutil']
