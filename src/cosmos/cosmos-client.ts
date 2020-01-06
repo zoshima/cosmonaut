@@ -11,12 +11,12 @@ export class CosmosClient {
   private _endpoint: string;
   private _key: string;
 
-  constructor(endpoint: string, key: string) {
-    this._endpoint = endpoint;
+  constructor(hostname: string, port: number, key: string) {
+    this._endpoint = `https://${hostname}:${port}`;
     this._key = key;
 
     const clientOptions: CosmosClientOptions = {
-      endpoint: endpoint,
+      endpoint: this._endpoint,
       key: key
     };
 

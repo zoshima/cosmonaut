@@ -5,7 +5,8 @@ import Settings from "./Settings";
 
 const settings: AppSettings = Environment.instance.settings;
 const cosmosClient: CosmosClient = new CosmosClient(
-  settings.database.endpoint,
+  settings.database.hostname,
+  settings.database.port,
   settings.database.key
 );
 

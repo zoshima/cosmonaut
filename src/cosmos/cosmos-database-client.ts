@@ -11,7 +11,14 @@ import {
 export class CosmosDatabaseClient {
   private database: Database;
 
-  constructor(endpoint: string, key: string, databaseName: string) {
+  constructor(
+    hostname: string,
+    port: number,
+    key: string,
+    databaseName: string
+  ) {
+    const endpoint: string = `https://${hostname}:${port}`;
+
     const clientOptions: CosmosClientOptions = {
       endpoint: endpoint,
       key: key

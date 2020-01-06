@@ -6,9 +6,14 @@ export class GremlinClientFactory {
   private endpoint: string;
   private databaseName: string;
 
-  constructor(endpoint: string, key: string, databaseName: string) {
+  constructor(
+    hostname: string,
+    port: number,
+    key: string,
+    databaseName: string
+  ) {
+    this.endpoint = `ws://${hostname}:${port}/gremlin`;
     this.clients = {};
-    this.endpoint = endpoint;
     this.databaseName = databaseName;
     this.key = key;
   }
