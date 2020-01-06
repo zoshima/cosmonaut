@@ -13,7 +13,7 @@ const cosmosClient: CosmosClient = new CosmosClient(
 const App: React.FC = () => {
   return (
     <React.Fragment>
-      <Settings cosmosClient={cosmosClient} />
+      <Settings cosmosClient={cosmosClient} appSettings={settings} />
     </React.Fragment>
   );
 };

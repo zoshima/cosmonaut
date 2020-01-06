@@ -9,22 +9,36 @@ import {
 export class CosmosClient {
   private client: AzureCosmosClient;
   private _endpoint: string;
+  private _hostname: string;
   private _key: string;
+  private _port: number;
 
   constructor(hostname: string, port: number, key: string) {
-    this._endpoint = `https://${hostname}:${port}`;
+    this._endpoint = `http://${hostname}:${port}/`;
     this._key = key;
+    this._hostname = hostname;
+    this._port = port;
 
     const clientOptions: CosmosClientOptions = {
       endpoint: this._endpoint,
       key: key
     };
 
+    console.log(this._endpoint, this._key);
+
     this.client = new AzureCosmosClient(clientOptions);
   }
 
   public get endpoint(): string {
     return this._endpoint;
+  }
+
+  public get hostname(): string {
+    return this._hostname;
+  }
+
+  public get port(): number {
+    return this._port;
   }
 
   public get key(): string {
