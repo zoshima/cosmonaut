@@ -1,7 +1,12 @@
 import * as fs from "fs";
 
 export interface AppSettings {
-  database: { endpoint: string; key: string };
+  database: {
+    hostname: string;
+    key: string;
+    port: number;
+    gremlin: { port: number };
+  };
 }
 
 export class Environment {

@@ -5,9 +5,11 @@ import DatabaseSelect from "./DatabaseSelect";
 import { CosmosDatabaseClient } from "../cosmos/cosmos-database-client";
 import ContainerSelect from "./ContainerSelect";
 import { GremlinClientFactory, GremlinClient } from "../cosmos/gremlin-client";
+import {AppSettings} from "../environment";
 
 interface SettingsProps {
   cosmosClient: CosmosClient;
+  appSettings: AppSettings;
 }
 
 const useStyles: any = makeStyles({
@@ -16,7 +18,7 @@ const useStyles: any = makeStyles({
   }
 });
 
-const Settings: React.FC<SettingsProps> = ({ cosmosClient }) => {
+const Settings: React.FC<SettingsProps> = ({ cosmosClient, appSettings }) => {
   const classes: any = useStyles();
 
   const [databaseClient, setDatabaseClient] = useState(null);
@@ -44,14 +46,16 @@ const Settings: React.FC<SettingsProps> = ({ cosmosClient }) => {
     }
 
     const _databaseClient: CosmosDatabaseClient = new CosmosDatabaseClient(
-      cosmosClient.endpoint,
-      cosmosClient.key,
+      appSettings.database.hostname,
+      appSettings.database.port,
+      appSettings.database.key,
       selectedDatabaseId
     );
 
     const _gremlinClientFactory: GremlinClientFactory = new GremlinClientFactory(
-      cosmosClient.endpoint,
-      cosmosClient.key,
+      appSettings.database.hostname,
+      appSettings.database.gremlin.port,
+      appSettings.database.key,
       selectedDatabaseId
     );
 
