@@ -10,9 +10,15 @@ export class GremlinClientFactory {
     hostname: string,
     port: number,
     key: string,
-    databaseName: string
+    databaseName: string,
+    local: boolean = false
   ) {
-    this.endpoint = `ws://${hostname}:${port}/gremlin`;
+    this.endpoint = `ws://${hostname}:${port}/`;
+
+    if (local) {
+      this.endpoint += "gremlin";
+    }
+
     this.clients = {};
     this.databaseName = databaseName;
     this.key = key;

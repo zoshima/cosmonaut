@@ -24,7 +24,7 @@ module.exports = [
   // tsx (react)
   {
     mode: 'development',
-    entry: './src/components/index.tsx',
+    entry: './src/components/Index.tsx',
     target: 'electron-renderer',
     module: { 
       rules: [

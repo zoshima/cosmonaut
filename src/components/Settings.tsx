@@ -1,97 +1,123 @@
 import React, { useEffect, useState } from "react";
 import { CosmosClient } from "../cosmos/cosmos-client";
-import { makeStyles } from "@material-ui/core";
-import DatabaseSelect from "./DatabaseSelect";
+import {
+  makeStyles,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel
+} from "@material-ui/core";
 import { CosmosDatabaseClient } from "../cosmos/cosmos-database-client";
-import ContainerSelect from "./ContainerSelect";
-import { GremlinClientFactory, GremlinClient } from "../cosmos/gremlin-client";
-import {AppSettings} from "../environment";
+import { AppSettings, Environment } from "../environment";
 
 interface SettingsProps {
-  cosmosClient: CosmosClient;
-  appSettings: AppSettings;
+  onContainerSelected: (databaseId: string, containerId: string) => void;
 }
 
 const useStyles: any = makeStyles({
   form: {
     width: "100%"
+  },
+  formControl: {
+    width: "100%"
   }
 });
 
-const Settings: React.FC<SettingsProps> = ({ cosmosClient, appSettings }) => {
+const Settings: React.FC<SettingsProps> = ({ onContainerSelected }) => {
   const classes: any = useStyles();
+  const settings: AppSettings = Environment.instance.settings;
 
-  const [databaseClient, setDatabaseClient] = useState(null);
-  const [gremlinClientFactory, setGremlinClientFactory] = useState(null);
-  const [gremlinClient, setGremlinClient] = useState(null);
-
-  const [databases, setDatabases] = useState([]);
-  const [containers, setContainers] = useState([]);
+  const [databaseIds, setDatabaseIds] = useState([]);
+  const [containerIds, setContainerIds] = useState([]);
+  const [databaseId, setDatabaseId] = useState("");
+  const [containerId, setContainerId] = useState("");
 
   useEffect(() => {
-    cosmosClient.getDatabases().then((databases: string[]) => {
-      setDatabases(databases);
+    const cosmosClient: CosmosClient = new CosmosClient(
+      settings.database.hostname,
+      settings.database.port,
+      settings.database.key
+    );
+
+    cosmosClient.getDatabases().then((databaseIds: string[]) => {
+      setDatabaseIds(databaseIds);
     });
   }, []);
 
-  const selectDatabase = async (selectedDatabaseId: string): Promise<void> => {
-    if (selectedDatabaseId === databaseClient?.id) {
+  const selectDatabase = async (
+    event: React.ChangeEvent<{ value: string }>
+  ): Promise<void> => {
+    const selectedDatabaseId: string = event.target.value;
+
+    if (databaseId === selectedDatabaseId) {
       return;
     }
 
-    console.log("select database");
-
-    if (gremlinClientFactory) {
-      await gremlinClientFactory.destroy();
-    }
-
-    const _databaseClient: CosmosDatabaseClient = new CosmosDatabaseClient(
-      appSettings.database.hostname,
-      appSettings.database.port,
-      appSettings.database.key,
+    const databaseClient: CosmosDatabaseClient = new CosmosDatabaseClient(
+      settings.database.hostname,
+      settings.database.port,
+      settings.database.key,
       selectedDatabaseId
     );
 
-    const _gremlinClientFactory: GremlinClientFactory = new GremlinClientFactory(
-      appSettings.database.hostname,
-      appSettings.database.gremlin.port,
-      appSettings.database.key,
-      selectedDatabaseId
-    );
+    const containerIds: string[] = await databaseClient.getContainers();
 
-    setDatabaseClient(_databaseClient);
-    setGremlinClientFactory(_gremlinClientFactory);
-
-    const containers: string[] = await _databaseClient.getContainers();
-
-    setContainers(containers);
+    setDatabaseId(selectedDatabaseId);
+    setContainerIds(containerIds);
   };
 
   const selectContainer = async (
-    selectedContainerId: string
+    event: React.ChangeEvent<{ value: string }>
   ): Promise<void> => {
-    if (selectedContainerId === gremlinClient?.containerId) {
+    const selectedContainerId: string = event.target.value;
+
+    if (containerId === selectedContainerId) {
       return;
     }
 
-    console.log("select container");
-
-    const _gremlinClient: GremlinClient = await gremlinClientFactory.createClient(
-      selectedContainerId
-    );
-
-    console.log("vertex count", await _gremlinClient.execute("g.V().count()"));
-
-    setGremlinClient(_gremlinClient);
+    setContainerId(selectedContainerId);
+    onContainerSelected(databaseId, selectedContainerId);
   };
 
   return (
-    <form className={classes.form} autoComplete="off">
-      <DatabaseSelect databases={databases} selectDatabase={selectDatabase} />
-      <ContainerSelect
-        containers={containers}
-        selectContainer={selectContainer}
-      />
+    <form autoComplete="off" className={classes.form}>
+      <FormControl className={classes.formControl}>
+        <InputLabel id="database-input-label">Database</InputLabel>
+        <Select
+          labelId="database-input-label"
+          id="database-select"
+          value={databaseId}
+          onChange={selectDatabase}
+          disabled={!databaseIds.length}
+        >
+          {databaseIds.map((database: string) => {
+            return (
+              <MenuItem key={database} value={database}>
+                {database}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+
+      <FormControl className={classes.formControl}>
+        <InputLabel id="container-input-label">Container</InputLabel>
+        <Select
+          labelId="container-input-label"
+          id="container-select"
+          value={containerId}
+          onChange={selectContainer}
+          disabled={!containerIds.length}
+        >
+          {containerIds.map((container: string) => {
+            return (
+              <MenuItem key={container} value={container}>
+                {container}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
     </form>
   );
 };

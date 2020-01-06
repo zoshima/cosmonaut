@@ -24,8 +24,6 @@ export class CosmosClient {
       key: key
     };
 
-    console.log(this._endpoint, this._key);
-
     this.client = new AzureCosmosClient(clientOptions);
   }
 
