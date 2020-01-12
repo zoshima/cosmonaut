@@ -11,7 +11,8 @@ import { CosmosDatabaseClient } from "../cosmos/cosmos-database-client";
 import { AppSettings, Environment } from "../environment";
 
 interface SettingsProps {
-  onContainerSelected: (databaseId: string, containerId: string) => void;
+  onDatabaseSelected: (databaseId: string) => void;
+  onContainerSelected: (databaseId: string) => void;
 }
 
 const useStyles: any = makeStyles({
@@ -23,7 +24,10 @@ const useStyles: any = makeStyles({
   }
 });
 
-const Settings: React.FC<SettingsProps> = ({ onContainerSelected }) => {
+const Settings: React.FC<SettingsProps> = ({
+  onDatabaseSelected,
+  onContainerSelected
+}) => {
   const classes: any = useStyles();
   const settings: AppSettings = Environment.instance.settings;
 
@@ -64,6 +68,7 @@ const Settings: React.FC<SettingsProps> = ({ onContainerSelected }) => {
 
     setDatabaseId(selectedDatabaseId);
     setContainerIds(containerIds);
+    onDatabaseSelected(selectedDatabaseId);
   };
 
   const selectContainer = async (
@@ -76,7 +81,7 @@ const Settings: React.FC<SettingsProps> = ({ onContainerSelected }) => {
     }
 
     setContainerId(selectedContainerId);
-    onContainerSelected(databaseId, selectedContainerId);
+    onContainerSelected(selectedContainerId);
   };
 
   return (
