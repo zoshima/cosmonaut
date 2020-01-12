@@ -7,7 +7,7 @@ const QueryResponse: React.FC<{ options: any, value: string }> = ({ options, val
       language="json"
       theme="vs-dark"
       value={value}
-      options={{ ...options, readOnly: true }}
+      options={{ ...options, readOnly: true, automaticLayout: true }}
     />
   );
 };

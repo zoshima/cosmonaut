@@ -11,17 +11,16 @@ const prettier: any = require("prettier");
 const settings: AppSettings = Environment.instance.settings;
 
 const useStyles: any = makeStyles({
-  grid: { padding: "8px" },
-  editorContainer: { height: "500px" },
-  resultContainer: { height: "500px" },
+  grid: { padding: "8px 8px 0px 8px", height: "100%" },
+  editorContainer: { height: "100px" },
+  resultContainer: { height: "100%" },
   submitContainer: {}
 });
 
 const editorOptions: any = {
   minimap: {
     enabled: false
-  },
-  lineNumbers: false
+  }
 };
 
 const App: React.FC = () => {
@@ -80,26 +79,24 @@ const App: React.FC = () => {
           onContainerSelected={onContainerSelected}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12}>
         <div className={classes.editorContainer}>
           <QueryEditor options={editorOptions} onChange={onQueryChange} />
         </div>
       </Grid>
-      <Grid item xs={6}>
-        <div className={classes.resultContainer}>
-          <QueryResponse options={editorOptions} value={queryResult} />
-        </div>
-      </Grid>
-      <Grid item xs={12}>
-        <div className={classes.submitContainer}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={onExecute}
-            disabled={!(databaseId && containerId && queryText)}
+      <Grid item xs={12} justify="flex-end">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={onExecute}
+          disabled={!(databaseId && containerId && queryText)}
           >
             Execute
           </Button>
+      </Grid>
+      <Grid item xs={12}>
+        <div className={classes.resultContainer}>
+          <QueryResponse options={editorOptions} value={queryResult} />
         </div>
       </Grid>
     </Grid>

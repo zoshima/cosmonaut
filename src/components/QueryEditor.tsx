@@ -16,7 +16,7 @@ const QueryEditor: React.FC<{ options: any; onChange: any }> = ({
       language="groovy"
       theme="vs-dark"
       defaultValue=""
-      options={options}
+      options={{...options, lineNumbers: false}}
       onChange={onChange}
       editorDidMount={editorDidMount}
     />
