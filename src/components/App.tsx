@@ -7,6 +7,7 @@ import { Grid, makeStyles, Button } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { GremlinClientFactory, GremlinClient } from "../cosmos/gremlin-client";
 
+const prettier: any = require("prettier");
 const settings: AppSettings = Environment.instance.settings;
 
 const useStyles: any = makeStyles({
@@ -17,7 +18,9 @@ const useStyles: any = makeStyles({
 });
 
 const editorOptions: any = {
-  minimap: false,
+  minimap: {
+    enabled: false
+  },
   lineNumbers: false
 };
 
@@ -27,6 +30,7 @@ const App: React.FC = () => {
   const [databaseId, setDatabaseId] = useState(null);
   const [containerId, setContainerId] = useState(null);
   const [queryText, setQueryText] = useState(null);
+  const [queryResult, setQueryResult] = useState(null);
 
   useEffect(() => {
     console.log("app component remounted");
@@ -50,17 +54,25 @@ const App: React.FC = () => {
 
     // TODO: instantiate on database id change
     const clientFactory: GremlinClientFactory = new GremlinClientFactory(
-      settings.database.hostname,
-      settings.database.port,
+      settings.database.gremlin.hostname,
+      settings.database.gremlin.port,
       settings.database.key,
       databaseId
     );
 
-    const client: GremlinClient = await clientFactory.createClient(containerId);
+    // TODO: instantiate on container id change
+    const client: GremlinClient = await clientFactory.createClient(containerId, false);
 
-    const response: any = await client.execute(queryText);
+    await client.open();
 
-    console.log("response", response);
+    const response: { _items: any[] } = await client.execute(queryText);
+
+    await client.close();
+
+    const responseString: string = JSON.stringify(response._items);
+    const formattedResponseString: string = prettier.format(responseString);
+
+    setQueryResult(formattedResponseString);
   };
 
   return (
@@ -78,7 +90,7 @@ const App: React.FC = () => {
       </Grid>
       <Grid item xs={6}>
         <div className={classes.resultContainer}>
-          <QueryResponse options={editorOptions} />
+          <QueryResponse options={editorOptions} value={queryResult} />
         </div>
       </Grid>
       <Grid item xs={12}>

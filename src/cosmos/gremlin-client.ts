@@ -13,7 +13,7 @@ export class GremlinClientFactory {
     databaseName: string,
     local: boolean = false
   ) {
-    this.endpoint = `ws://${hostname}:${port}/`;
+    this.endpoint = `wss://${hostname}:${port}/`;
 
     if (local) {
       this.endpoint += "gremlin";
