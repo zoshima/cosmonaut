@@ -59,14 +59,19 @@ const App: React.FC = () => {
     // TODO: instantiate on container id change
     const client: GremlinClient = await clientFactory.createClient(containerId, false);
 
-    await client.open();
+    let responseJson: any;
 
-    const response: { _items: any[] } = await client.execute(queryText);
+    try {
+      await client.open();
+      const response: { _items: any[] } = await client.execute(queryText);
+      responseJson = response._items;
+      await client.close();
+    } catch (e) {
+      responseJson = [{ name: e.name, statusCode: e.statusCode, statusMessage: e.statusMessage }];
+    }
 
-    await client.close();
-
-    const responseString: string = JSON.stringify(response._items);
-    const formattedResponseString: string = prettier.format(responseString);
+    const responseString: string = JSON.stringify(responseJson);
+    const formattedResponseString: string = prettier.format(responseString, { quoteProps: "as-needed" });
 
     setQueryResult(formattedResponseString);
   };
