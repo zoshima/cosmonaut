@@ -45,43 +45,59 @@ const Settings: React.FC<SettingsProps> = ({
 
     cosmosClient.getDatabases().then((databaseIds: string[]) => {
       setDatabaseIds(databaseIds);
+
+      if (databaseIds.length) {
+        selectDatabase(databaseIds[0]);
+      }
     });
   }, []);
 
-  const selectDatabase = async (
+  const onDatabaseIdChanged = async (
     event: React.ChangeEvent<{ value: string }>
   ): Promise<void> => {
     const selectedDatabaseId: string = event.target.value;
 
-    if (databaseId === selectedDatabaseId) {
-      return;
+    if (databaseId !== selectedDatabaseId) {
+      selectDatabase(selectedDatabaseId);
     }
-
-    const databaseClient: CosmosDatabaseClient = new CosmosDatabaseClient(
-      settings.database.hostname,
-      settings.database.port,
-      settings.database.key,
-      selectedDatabaseId
-    );
-
-    const containerIds: string[] = await databaseClient.getContainers();
-
-    setDatabaseId(selectedDatabaseId);
-    setContainerIds(containerIds);
-    onDatabaseSelected(selectedDatabaseId);
   };
 
-  const selectContainer = async (
+  const onContainerIdIdChanged = async (
     event: React.ChangeEvent<{ value: string }>
   ): Promise<void> => {
     const selectedContainerId: string = event.target.value;
 
-    if (containerId === selectedContainerId) {
-      return;
+    if (containerId !== selectedContainerId) {
+      selectContainer(selectedContainerId);
     }
+  };
 
-    setContainerId(selectedContainerId);
-    onContainerSelected(selectedContainerId);
+  const selectDatabase = async (
+    id: string
+  ): Promise<void> => {
+    const databaseClient: CosmosDatabaseClient = new CosmosDatabaseClient(
+      settings.database.hostname,
+      settings.database.port,
+      settings.database.key,
+      id
+    );
+
+    const containerIds: string[] = await databaseClient.getContainers();
+
+    setDatabaseId(id);
+    setContainerIds(containerIds);
+    onDatabaseSelected(id);
+
+    if (containerIds.length) {
+      selectContainer(containerIds[0]);
+    }
+  };
+
+  const selectContainer = async (
+    id: string
+  ): Promise<void> => {
+    setContainerId(id);
+    onContainerSelected(id);
   };
 
   return (
@@ -92,7 +108,7 @@ const Settings: React.FC<SettingsProps> = ({
           labelId="database-input-label"
           id="database-select"
           value={databaseId}
-          onChange={selectDatabase}
+          onChange={onDatabaseIdChanged}
           disabled={!databaseIds.length}
         >
           {databaseIds.map((database: string) => {
@@ -111,7 +127,7 @@ const Settings: React.FC<SettingsProps> = ({
           labelId="container-input-label"
           id="container-select"
           value={containerId}
-          onChange={selectContainer}
+          onChange={onContainerIdIdChanged}
           disabled={!containerIds.length}
         >
           {containerIds.map((container: string) => {

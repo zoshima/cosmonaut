@@ -1,10 +1,16 @@
 import * as React from "react";
 import MonacoEditor from "react-monaco-editor";
+import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 
 const QueryEditor: React.FC<{ options: any; onChange: any }> = ({
   options,
   onChange
 }) => {
+
+  const editorDidMount = (editor: monacoEditor.editor.IStandaloneCodeEditor) => {
+    editor.focus();
+  };
+
   return (
     <MonacoEditor
       language="groovy"
@@ -12,6 +18,7 @@ const QueryEditor: React.FC<{ options: any; onChange: any }> = ({
       defaultValue=""
       options={options}
       onChange={onChange}
+      editorDidMount={editorDidMount}
     />
   );
 };

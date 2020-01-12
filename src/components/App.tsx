@@ -33,7 +33,6 @@ const App: React.FC = () => {
   const [queryResult, setQueryResult] = useState(null);
 
   useEffect(() => {
-    console.log("app component remounted");
   });
 
   const onDatabaseSelected = (databaseId: string): void => {
@@ -50,8 +49,6 @@ const App: React.FC = () => {
   };
 
   const onExecute = async (): Promise<void> => {
-    console.log("onExecute");
-
     // TODO: instantiate on database id change
     const clientFactory: GremlinClientFactory = new GremlinClientFactory(
       settings.database.gremlin.hostname,
