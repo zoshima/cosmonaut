@@ -7,6 +7,7 @@ import {
   ContainerDefinition,
   FeedResponse
 } from "@azure/cosmos";
+import https from "https";
 
 export class CosmosDatabaseClient {
   private database: Database;
@@ -21,7 +22,10 @@ export class CosmosDatabaseClient {
 
     const clientOptions: CosmosClientOptions = {
       endpoint: endpoint,
-      key: key
+      key: key,
+      agent: new https.Agent({
+        rejectUnauthorized: false
+      })
     };
 
     const client: AzureCosmosClient = new AzureCosmosClient(clientOptions);

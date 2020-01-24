@@ -31,8 +31,7 @@ const App: React.FC = () => {
   const [queryText, setQueryText] = useState(null);
   const [queryResult, setQueryResult] = useState(null);
 
-  useEffect(() => {
-  });
+  useEffect(() => {});
 
   const onDatabaseSelected = (databaseId: string): void => {
     setDatabaseId(databaseId);
@@ -50,28 +49,44 @@ const App: React.FC = () => {
   const onExecute = async (): Promise<void> => {
     // TODO: instantiate on database id change
     const clientFactory: GremlinClientFactory = new GremlinClientFactory(
+      settings.database.gremlin.protocol,
       settings.database.gremlin.hostname,
       settings.database.gremlin.port,
       settings.database.key,
-      databaseId
+      databaseId,
+      true
     );
 
     // TODO: instantiate on container id change
-    const client: GremlinClient = await clientFactory.createClient(containerId, false);
+    const client: GremlinClient = await clientFactory.createClient(
+      containerId,
+      false
+    );
 
     let responseJson: any;
 
     try {
       await client.open();
+      console.log("request", queryText);
       const response: { _items: any[] } = await client.execute(queryText);
+      console.log("response", response);
       responseJson = response._items;
       await client.close();
     } catch (e) {
-      responseJson = [{ name: e.name, statusCode: e.statusCode, statusMessage: e.statusMessage }];
+      console.log("err", e);
+      responseJson = [
+        {
+          name: e.name,
+          statusCode: e.statusCode,
+          statusMessage: e.statusMessage
+        }
+      ];
     }
 
     const responseString: string = JSON.stringify(responseJson);
-    const formattedResponseString: string = prettier.format(responseString, { quoteProps: "as-needed" });
+    const formattedResponseString: string = prettier.format(responseString, {
+      quoteProps: "as-needed"
+    });
 
     setQueryResult(formattedResponseString);
   };
@@ -95,9 +110,9 @@ const App: React.FC = () => {
           color="primary"
           onClick={onExecute}
           disabled={!(databaseId && containerId && queryText)}
-          >
-            Execute
-          </Button>
+        >
+          Execute
+        </Button>
       </Grid>
       <Grid item xs={12}>
         <div className={classes.resultContainer}>

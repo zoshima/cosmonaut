@@ -5,7 +5,7 @@ export interface AppSettings {
     hostname: string;
     key: string;
     port: number;
-    gremlin: { hostname: string; port: number };
+    gremlin: { protocol: string; hostname: string; port: number };
   };
 }
 

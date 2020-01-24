@@ -7,13 +7,14 @@ export class GremlinClientFactory {
   private databaseName: string;
 
   constructor(
+    protocol: string,
     hostname: string,
     port: number,
     key: string,
     databaseName: string,
     local: boolean = false
   ) {
-    this.endpoint = `wss://${hostname}:${port}/`;
+    this.endpoint = `${protocol}://${hostname}:${port}/`;
 
     if (local) {
       this.endpoint += "gremlin";
@@ -22,6 +23,8 @@ export class GremlinClientFactory {
     this.clients = {};
     this.databaseName = databaseName;
     this.key = key;
+
+    console.log(this.endpoint, this.key, this.databaseName);
   }
 
   public async createClient(
@@ -36,6 +39,8 @@ export class GremlinClientFactory {
       `/dbs/${this.databaseName}/colls/${containerId}`,
       this.key
     );
+
+    console.log(containerId, authenticator, this.endpoint);
 
     const connection: GremlinClient = new GremlinClient(
       containerId,
@@ -72,7 +77,7 @@ export class GremlinClient {
     this.client = new driver.Client(endpoint, {
       authenticator,
       traversalsource: "g",
-      rejectUnauthorized: true,
+      rejectUnauthorized: false,
       mimeType: "application/vnd.gremlin-v2.0+json"
     });
   }
