@@ -11,9 +11,9 @@ const prettier: any = require("prettier");
 const settings: AppSettings = Environment.instance.settings;
 
 const useStyles: any = makeStyles({
-  grid: { padding: "8px 8px 0px 8px", height: "100%" },
+  grid: { padding: "5px 5px 0px 5px", height: "100%" },
   editorContainer: { height: "100px" },
-  resultContainer: { height: "100%" },
+  resultContainer: { height: "510px" },
   submitContainer: {}
 });
 
@@ -31,7 +31,9 @@ const App: React.FC = () => {
   const [queryText, setQueryText] = useState(null);
   const [queryResult, setQueryResult] = useState(null);
 
-  useEffect(() => {});
+  useEffect(() => {
+    console.log("root useEffect()");
+  });
 
   const onDatabaseSelected = (databaseId: string): void => {
     setDatabaseId(databaseId);
@@ -67,13 +69,10 @@ const App: React.FC = () => {
 
     try {
       await client.open();
-      console.log("request", queryText);
       const response: { _items: any[] } = await client.execute(queryText);
-      console.log("response", response);
       responseJson = response._items;
       await client.close();
     } catch (e) {
-      console.log("err", e);
       responseJson = [
         {
           name: e.name,
@@ -104,7 +103,7 @@ const App: React.FC = () => {
           <QueryEditor options={editorOptions} onChange={onQueryChange} />
         </div>
       </Grid>
-      <Grid item xs={12} justify="flex-end">
+      <Grid item xs={12}>
         <Button
           variant="contained"
           color="primary"

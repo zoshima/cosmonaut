@@ -1,13 +1,18 @@
 import * as React from "react";
 import MonacoEditor from "react-monaco-editor";
 
-const QueryResponse: React.FC<{ options: any, value: string }> = ({ options, value }) => {
+const QueryResponse: React.FC<{ options: any; value: string }> = ({
+  options,
+  value
+}) => {
   return (
     <MonacoEditor
       language="json"
       theme="vs-dark"
       value={value}
-      options={{ ...options, readOnly: true, automaticLayout: true }}
+      width="100%"
+      height="100%"
+      options={{ ...options, readOnly: true }}
     />
   );
 };
