@@ -6,6 +6,8 @@ import QueryResponse from "./QueryResponse";
 import { Grid, makeStyles, Button } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { GremlinClientFactory, GremlinClient } from "../cosmos/gremlin-client";
+import { CosmosDatabaseClient } from "../cosmos/cosmos-database-client";
+import { CosmosClient } from "../cosmos/cosmos-client";
 
 const prettier: any = require("prettier");
 const settings: AppSettings = Environment.instance.settings;
@@ -26,22 +28,89 @@ const editorOptions: any = {
 const App: React.FC = () => {
   const classes: any = useStyles();
 
-  const [databaseId, setDatabaseId] = useState(null);
-  const [containerId, setContainerId] = useState(null);
+  const [databaseIds, setDatabaseIds] = useState([]);
+  const [containerIds, setContainerIds] = useState([]);
+
+  const [databaseClient, setDatabaseClient] = useState(null);
+  const [gremlinClientFactory, setGremlinClientFactory] = useState(null);
+  const [gremlinClient, setGremlinClient] = useState(null);
+
   const [queryText, setQueryText] = useState(null);
   const [queryResult, setQueryResult] = useState(null);
+  const [errorText, setErrorText] = useState(null);
 
   useEffect(() => {
-    console.log("root useEffect()");
-  });
+    console.log("main useEffect()");
 
-  const onDatabaseSelected = (databaseId: string): void => {
-    setDatabaseId(databaseId);
-    setContainerId(null);
+    const cosmosClient: CosmosClient = new CosmosClient(
+      settings.database.hostname,
+      settings.database.port,
+      settings.database.key
+    );
+
+    cosmosClient
+      .getDatabases()
+      .then((databaseIds: string[]) => {
+        setDatabaseIds(databaseIds);
+      })
+      .catch(err => {
+        setErrorText(JSON.stringify(err));
+      });
+  }, []);
+
+  const onDatabaseSelected = async (databaseId: string): Promise<void> => {
+    try {
+      if (gremlinClientFactory) {
+        await gremlinClientFactory.destroy();
+      }
+
+      const databaseClient: CosmosDatabaseClient = new CosmosDatabaseClient(
+        settings.database.hostname,
+        settings.database.port,
+        settings.database.key,
+        databaseId
+      );
+
+      const clientFactory: GremlinClientFactory = new GremlinClientFactory(
+        settings.database.gremlin.protocol,
+        settings.database.gremlin.hostname,
+        settings.database.gremlin.port,
+        settings.database.key,
+        databaseId,
+        true
+      );
+
+      const containerIds = await databaseClient.getContainers();
+
+      setDatabaseClient(databaseClient);
+      setGremlinClientFactory(clientFactory);
+      setContainerIds(containerIds);
+    } catch (err) {
+      setErrorText(JSON.stringify(err));
+
+      setDatabaseClient(null);
+      setGremlinClientFactory(null);
+      setContainerIds(null);
+    }
   };
 
-  const onContainerSelected = (containerId: string): void => {
-    setContainerId(containerId);
+  const onContainerSelected = async (containerId: string): Promise<void> => {
+    if (gremlinClient && gremlinClient.isOpen) {
+      await gremlinClient.close();
+    }
+
+    try {
+      const client: GremlinClient = await gremlinClientFactory.createClient(
+        containerId,
+        false
+      );
+
+      setGremlinClient(client);
+    } catch (err) {
+      setErrorText(JSON.stringify(err));
+
+      setGremlinClient(null);
+    }
   };
 
   const onQueryChange = (query: string): void => {
@@ -49,51 +118,35 @@ const App: React.FC = () => {
   };
 
   const onExecute = async (): Promise<void> => {
-    // TODO: instantiate on database id change
-    const clientFactory: GremlinClientFactory = new GremlinClientFactory(
-      settings.database.gremlin.protocol,
-      settings.database.gremlin.hostname,
-      settings.database.gremlin.port,
-      settings.database.key,
-      databaseId,
-      true
-    );
-
-    // TODO: instantiate on container id change
-    const client: GremlinClient = await clientFactory.createClient(
-      containerId,
-      false
-    );
-
     let responseJson: any;
 
     try {
-      await client.open();
-      const response: { _items: any[] } = await client.execute(queryText);
+      if (!gremlinClient.isOpen) {
+        await gremlinClient.open();
+      }
+
+      const response: { _items: any[] } = await gremlinClient.execute(
+        queryText
+      );
       responseJson = response._items;
-      await client.close();
-    } catch (e) {
-      responseJson = [
-        {
-          name: e.name,
-          statusCode: e.statusCode,
-          statusMessage: e.statusMessage
-        }
-      ];
+
+      const responseString: string = JSON.stringify(responseJson);
+      const formattedResponseString: string = prettier.format(responseString, {
+        quoteProps: "as-needed"
+      });
+
+      setQueryResult(formattedResponseString);
+    } catch (err) {
+      setErrorText(JSON.stringify(err));
     }
-
-    const responseString: string = JSON.stringify(responseJson);
-    const formattedResponseString: string = prettier.format(responseString, {
-      quoteProps: "as-needed"
-    });
-
-    setQueryResult(formattedResponseString);
   };
 
   return (
     <Grid className={classes.grid} container spacing={1}>
       <Grid item xs={12}>
         <Settings
+          databaseIds={databaseIds}
+          containerIds={containerIds}
           onDatabaseSelected={onDatabaseSelected}
           onContainerSelected={onContainerSelected}
         />
@@ -104,18 +157,16 @@ const App: React.FC = () => {
         </div>
       </Grid>
       <Grid item xs={12}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={onExecute}
-          disabled={!(databaseId && containerId && queryText)}
-        >
+        <Button variant="contained" color="primary" onClick={onExecute}>
           Execute
         </Button>
       </Grid>
       <Grid item xs={12}>
         <div className={classes.resultContainer}>
-          <QueryResponse options={editorOptions} value={queryResult} />
+          <QueryResponse
+            options={editorOptions}
+            value={errorText || queryResult}
+          />
         </div>
       </Grid>
     </Grid>

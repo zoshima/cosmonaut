@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { CosmosClient } from "../cosmos/cosmos-client";
 import {
   makeStyles,
   FormControl,
@@ -7,10 +6,10 @@ import {
   MenuItem,
   InputLabel
 } from "@material-ui/core";
-import { CosmosDatabaseClient } from "../cosmos/cosmos-database-client";
-import { AppSettings, Environment } from "../environment";
 
 interface SettingsProps {
+  databaseIds: string[];
+  containerIds: string[];
   onDatabaseSelected: (databaseId: string) => void;
   onContainerSelected: (databaseId: string) => void;
 }
@@ -25,32 +24,15 @@ const useStyles: any = makeStyles({
 });
 
 const Settings: React.FC<SettingsProps> = ({
+  databaseIds,
+  containerIds,
   onDatabaseSelected,
   onContainerSelected
 }) => {
   const classes: any = useStyles();
-  const settings: AppSettings = Environment.instance.settings;
 
-  const [databaseIds, setDatabaseIds] = useState([]);
-  const [containerIds, setContainerIds] = useState([]);
   const [databaseId, setDatabaseId] = useState("");
   const [containerId, setContainerId] = useState("");
-
-  useEffect(() => {
-    const cosmosClient: CosmosClient = new CosmosClient(
-      settings.database.hostname,
-      settings.database.port,
-      settings.database.key
-    );
-
-    cosmosClient.getDatabases().then((databaseIds: string[]) => {
-      setDatabaseIds(databaseIds);
-
-      if (databaseIds.length) {
-        selectDatabase(databaseIds[0]);
-      }
-    });
-  }, []);
 
   const onDatabaseIdChanged = async (
     event: React.ChangeEvent<{ value: string }>
@@ -58,46 +40,20 @@ const Settings: React.FC<SettingsProps> = ({
     const selectedDatabaseId: string = event.target.value;
 
     if (databaseId !== selectedDatabaseId) {
-      selectDatabase(selectedDatabaseId);
+      onDatabaseSelected(selectedDatabaseId);
+      setDatabaseId(selectedDatabaseId);
     }
   };
 
-  const onContainerIdIdChanged = async (
+  const onContainerIdChanged = async (
     event: React.ChangeEvent<{ value: string }>
   ): Promise<void> => {
     const selectedContainerId: string = event.target.value;
 
     if (containerId !== selectedContainerId) {
-      selectContainer(selectedContainerId);
+      onContainerSelected(selectedContainerId);
+      setContainerId(selectedContainerId);
     }
-  };
-
-  const selectDatabase = async (
-    id: string
-  ): Promise<void> => {
-    const databaseClient: CosmosDatabaseClient = new CosmosDatabaseClient(
-      settings.database.hostname,
-      settings.database.port,
-      settings.database.key,
-      id
-    );
-
-    const containerIds: string[] = await databaseClient.getContainers();
-
-    setDatabaseId(id);
-    setContainerIds(containerIds);
-    onDatabaseSelected(id);
-
-    if (containerIds.length) {
-      selectContainer(containerIds[0]);
-    }
-  };
-
-  const selectContainer = async (
-    id: string
-  ): Promise<void> => {
-    setContainerId(id);
-    onContainerSelected(id);
   };
 
   return (
@@ -127,7 +83,7 @@ const Settings: React.FC<SettingsProps> = ({
           labelId="container-input-label"
           id="container-select"
           value={containerId}
-          onChange={onContainerIdIdChanged}
+          onChange={onContainerIdChanged}
           disabled={!containerIds.length}
         >
           {containerIds.map((container: string) => {

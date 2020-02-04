@@ -23,14 +23,9 @@ export class GremlinClientFactory {
     this.clients = {};
     this.databaseName = databaseName;
     this.key = key;
-
-    console.log(this.endpoint, this.key, this.databaseName);
   }
 
-  public async createClient(
-    containerId: string,
-    openConnection: boolean = true
-  ): Promise<GremlinClient> {
+  public async createClient(containerId: string): Promise<GremlinClient> {
     if (this.clients[containerId]) {
       return this.clients[containerId];
     }
@@ -40,17 +35,11 @@ export class GremlinClientFactory {
       this.key
     );
 
-    console.log(containerId, authenticator, this.endpoint);
-
     const connection: GremlinClient = new GremlinClient(
       containerId,
       authenticator,
       this.endpoint
     );
-
-    if (openConnection) {
-      await connection.open();
-    }
 
     this.clients[containerId] = connection;
 
@@ -71,8 +60,10 @@ export class GremlinClientFactory {
 export class GremlinClient {
   private client: driver.Client;
   private _containerId: string;
+  private _isOpen: boolean;
 
   constructor(containerId: string, authenticator: any, endpoint: string) {
+    this._isOpen = false;
     this._containerId = containerId;
     this.client = new driver.Client(endpoint, {
       authenticator,
@@ -86,12 +77,26 @@ export class GremlinClient {
     return this._containerId;
   }
 
+  public get isOpen(): boolean {
+    return this._isOpen;
+  }
+
   public async open(): Promise<void> {
-    await this.client.open();
+    if (!this._isOpen) {
+      await this.client.open();
+      this._isOpen = true;
+
+      console.log("opening client", this._containerId);
+    }
   }
 
   public async close(): Promise<void> {
-    await this.client.close();
+    if (this._isOpen) {
+      await this.client.close();
+      this._isOpen = false;
+
+      console.log("closing client", this._containerId);
+    }
   }
 
   public async execute(query: string): Promise<any> {
