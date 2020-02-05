@@ -83,19 +83,19 @@ export class GremlinClient {
 
   public async open(): Promise<void> {
     if (!this._isOpen) {
+      console.log("opening client", this._containerId);
+
       await this.client.open();
       this._isOpen = true;
-
-      console.log("opening client", this._containerId);
     }
   }
 
   public async close(): Promise<void> {
     if (this._isOpen) {
+      console.log("closing client", this._containerId);
+
       await this.client.close();
       this._isOpen = false;
-
-      console.log("closing client", this._containerId);
     }
   }
 

@@ -15,11 +15,10 @@ interface SettingsProps {
 }
 
 const useStyles: any = makeStyles({
-  form: {
-    width: "100%"
-  },
+  form: {},
   formControl: {
-    width: "100%"
+    width: "200px",
+    marginRight: "10px"
   }
 });
 
@@ -58,7 +57,7 @@ const Settings: React.FC<SettingsProps> = ({
 
   return (
     <form autoComplete="off" className={classes.form}>
-      <FormControl className={classes.formControl}>
+      <FormControl className={classes.formControl} variant="outlined">
         <InputLabel id="database-input-label">Database</InputLabel>
         <Select
           labelId="database-input-label"
@@ -67,6 +66,9 @@ const Settings: React.FC<SettingsProps> = ({
           onChange={onDatabaseIdChanged}
           disabled={!databaseIds.length}
         >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
           {databaseIds.map((database: string) => {
             return (
               <MenuItem key={database} value={database}>
@@ -77,7 +79,7 @@ const Settings: React.FC<SettingsProps> = ({
         </Select>
       </FormControl>
 
-      <FormControl className={classes.formControl}>
+      <FormControl className={classes.formControl} variant="outlined">
         <InputLabel id="container-input-label">Container</InputLabel>
         <Select
           labelId="container-input-label"
@@ -86,6 +88,9 @@ const Settings: React.FC<SettingsProps> = ({
           onChange={onContainerIdChanged}
           disabled={!containerIds.length}
         >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
           {containerIds.map((container: string) => {
             return (
               <MenuItem key={container} value={container}>

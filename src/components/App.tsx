@@ -13,10 +13,13 @@ const prettier: any = require("prettier");
 const settings: AppSettings = Environment.instance.settings;
 
 const useStyles: any = makeStyles({
-  grid: { height: "100%" },
-  settingsContainer: {},
-  editorContainer: { height: "591px" },
-  resultContainer: { height: "591px" },
+  grid: { display: "flex", flexDirection: "column", height: "100%" },
+  top: { display: "flex", padding: "10px", diplay: "flex" },
+  bottom: { flex: 1, display: "flex" },
+
+  settingsContainer: { flex: 1 },
+  editorContainer: { height: "100%", flex: 1 },
+  resultContainer: { height: "100%", flex: 1 },
   submitContainer: {}
 });
 
@@ -138,13 +141,14 @@ const App: React.FC = () => {
 
       setQueryResult(formattedResponseString);
     } catch (err) {
+      console.error(err);
       setErrorText(JSON.stringify(err));
     }
   };
 
   return (
-    <Grid className={classes.grid} container spacing={0}>
-      <Grid item xs={12}>
+    <div className={classes.grid}>
+      <div className={classes.top}>
         <div className={classes.settingsContainer}>
           <Settings
             databaseIds={databaseIds}
@@ -153,26 +157,24 @@ const App: React.FC = () => {
             onContainerSelected={onContainerSelected}
           />
         </div>
-      </Grid>
-      <Grid item xs={6}>
+
+        <Button variant="contained" color="primary" onClick={onExecute}>
+          Exec
+        </Button>
+      </div>
+      <div className={classes.bottom}>
         <div className={classes.editorContainer}>
           <QueryEditor options={editorOptions} onChange={onQueryChange} />
         </div>
-      </Grid>
-      <Grid item xs={6}>
         <div className={classes.resultContainer}>
           <QueryResponse
             options={editorOptions}
             value={errorText || queryResult}
           />
         </div>
-      </Grid>
-    </Grid>
+      </div>
+    </div>
   );
 };
 
 export default App;
-
-// <Button variant="contained" color="primary" onClick={onExecute}>
-//   Execute
-// </Button>
