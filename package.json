@@ -17,6 +17,7 @@
     "@material-ui/icons": "^4.5.1",
     "gremlin": "^3.4.4",
     "html-webpack-plugin": "^3.2.0",
+    "monaco-ace-tokenizer": "^0.1.1",
     "monaco-editor": "^0.19.2",
     "prettier": "^1.19.1",
     "react": "^16.12.0",
