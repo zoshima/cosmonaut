@@ -64,11 +64,8 @@ const Settings: React.FC<SettingsProps> = ({
           id="database-select"
           value={databaseId}
           onChange={onDatabaseIdChanged}
-          disabled={!databaseIds.length}
+          disabled={!(databaseIds && databaseIds.length)}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
           {databaseIds.map((database: string) => {
             return (
               <MenuItem key={database} value={database}>
@@ -86,11 +83,8 @@ const Settings: React.FC<SettingsProps> = ({
           id="container-select"
           value={containerId}
           onChange={onContainerIdChanged}
-          disabled={!containerIds.length}
+          disabled={!(containerIds && containerIds.length)}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
           {containerIds.map((container: string) => {
             return (
               <MenuItem key={container} value={container}>
