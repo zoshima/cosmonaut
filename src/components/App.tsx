@@ -87,13 +87,15 @@ const App: React.FC = () => {
       const containerIds = await databaseClient.getContainers();
 
       setDatabaseClient(databaseClient);
-      setGremlinClientFactory(clientFactory);
       setContainerIds(containerIds);
+      setGremlinClientFactory(clientFactory);
+      setGremlinClient(null);
     } catch (err) {
       onError(err);
 
       setDatabaseClient(null);
       setGremlinClientFactory(null);
+      setGremlinClient(null);
       setContainerIds(null);
     }
   };
@@ -172,7 +174,12 @@ const App: React.FC = () => {
           />
         </div>
 
-        <Button variant="contained" color="primary" onClick={onExecute}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={onExecute}
+          disabled={!(gremlinClient && queryText)}
+        >
           Exec
         </Button>
       </div>
