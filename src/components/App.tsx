@@ -58,7 +58,7 @@ const App: React.FC = () => {
         setDatabaseIds(databaseIds);
       })
       .catch(err => {
-        setErrorText(JSON.stringify(err));
+        onError(err);
       });
   }, []);
 
@@ -90,7 +90,7 @@ const App: React.FC = () => {
       setGremlinClientFactory(clientFactory);
       setContainerIds(containerIds);
     } catch (err) {
-      setErrorText(JSON.stringify(err));
+      onError(err);
 
       setDatabaseClient(null);
       setGremlinClientFactory(null);
@@ -111,7 +111,7 @@ const App: React.FC = () => {
 
       setGremlinClient(client);
     } catch (err) {
-      setErrorText(JSON.stringify(err));
+      onError(err);
 
       setGremlinClient(null);
     }
@@ -135,15 +135,29 @@ const App: React.FC = () => {
       responseJson = response._items;
 
       const responseString: string = JSON.stringify(responseJson);
-      const formattedResponseString: string = prettier.format(responseString, {
-        quoteProps: "as-needed"
-      });
 
-      setQueryResult(formattedResponseString);
+      setQueryResult(prettify(responseString));
     } catch (err) {
-      console.error(err);
-      setErrorText(JSON.stringify(err));
+      onError(err);
     }
+  };
+
+  const onError = (err: any): void => {
+    console.error(err);
+
+    if (err.message) {
+      setErrorText(err.message);
+    } else {
+      setErrorText(prettify(JSON.stringify(err)));
+    }
+  };
+
+  const prettify = (json: string): string => {
+    const prettifiedJson: string = prettier.format(json, {
+      quoteProps: "as-needed"
+    });
+
+    return prettifiedJson;
   };
 
   return (
