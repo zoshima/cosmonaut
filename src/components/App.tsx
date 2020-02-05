@@ -13,9 +13,10 @@ const prettier: any = require("prettier");
 const settings: AppSettings = Environment.instance.settings;
 
 const useStyles: any = makeStyles({
-  grid: { padding: "5px 5px 0px 5px", height: "100%" },
-  editorContainer: { height: "100px" },
-  resultContainer: { height: "510px" },
+  grid: { height: "100%" },
+  settingsContainer: {},
+  editorContainer: { height: "591px" },
+  resultContainer: { height: "591px" },
   submitContainer: {}
 });
 
@@ -142,26 +143,23 @@ const App: React.FC = () => {
   };
 
   return (
-    <Grid className={classes.grid} container spacing={1}>
+    <Grid className={classes.grid} container spacing={0}>
       <Grid item xs={12}>
-        <Settings
-          databaseIds={databaseIds}
-          containerIds={containerIds}
-          onDatabaseSelected={onDatabaseSelected}
-          onContainerSelected={onContainerSelected}
-        />
+        <div className={classes.settingsContainer}>
+          <Settings
+            databaseIds={databaseIds}
+            containerIds={containerIds}
+            onDatabaseSelected={onDatabaseSelected}
+            onContainerSelected={onContainerSelected}
+          />
+        </div>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={6}>
         <div className={classes.editorContainer}>
           <QueryEditor options={editorOptions} onChange={onQueryChange} />
         </div>
       </Grid>
-      <Grid item xs={12}>
-        <Button variant="contained" color="primary" onClick={onExecute}>
-          Execute
-        </Button>
-      </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={6}>
         <div className={classes.resultContainer}>
           <QueryResponse
             options={editorOptions}
@@ -174,3 +172,7 @@ const App: React.FC = () => {
 };
 
 export default App;
+
+// <Button variant="contained" color="primary" onClick={onExecute}>
+//   Execute
+// </Button>

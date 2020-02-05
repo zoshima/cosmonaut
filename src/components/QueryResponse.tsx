@@ -10,8 +10,6 @@ const QueryResponse: React.FC<{ options: any; value: string }> = ({
       language="json"
       theme="vs-dark"
       value={value}
-      width="100%"
-      height="100%"
       options={{ ...options, readOnly: true }}
     />
   );

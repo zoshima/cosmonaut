@@ -9,8 +9,9 @@ const createMainWindow = () => {
       nodeIntegration: true
     },
     title: "Cosmonaut",
-    width: 700,
-    height: 800
+    width: 1024,
+    height: 768,
+    resizable: false
     // webPreferences: {
     //   preload: path.join(__dirname, "preload.js")
     // }
