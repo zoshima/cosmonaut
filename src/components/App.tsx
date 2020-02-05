@@ -8,8 +8,9 @@ import { useEffect, useState } from "react";
 import { GremlinClientFactory, GremlinClient } from "../cosmos/gremlin-client";
 import { CosmosDatabaseClient } from "../cosmos/cosmos-database-client";
 import { CosmosClient } from "../cosmos/cosmos-client";
+//@ts-ignore
+import prettier from "prettier";
 
-const prettier: any = require("prettier");
 const settings: AppSettings = Environment.instance.settings;
 
 const useStyles: any = makeStyles({

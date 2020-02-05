@@ -1,7 +1,9 @@
 import * as React from "react";
 import MonacoEditor from "react-monaco-editor";
 import * as monacoEditor from "monaco-editor/esm/vs/editor/editor.api";
+//@ts-ignore
 import { registerRulesForLanguage } from "monaco-ace-tokenizer";
+//@ts-ignore
 import GremlinHightlightRules from "monaco-ace-tokenizer/lib/ace/definitions/groovy";
 
 const QueryEditor: React.FC<{
