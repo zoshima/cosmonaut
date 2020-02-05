@@ -18,15 +18,16 @@ const useStyles: any = makeStyles({
   bottom: { flex: 1, display: "flex" },
 
   settingsContainer: { flex: 1 },
-  editorContainer: { height: "100%", flex: 1 },
-  resultContainer: { height: "100%", flex: 1 },
+  editorContainer: { height: "100%", width: "100%" },
+  resultContainer: { height: "100%", width: "100%" },
   submitContainer: {}
 });
 
 const editorOptions: any = {
   minimap: {
     enabled: false
-  }
+  },
+  automaticLayout: true
 };
 
 const App: React.FC = () => {
