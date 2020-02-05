@@ -30,6 +30,7 @@ const editorOptions: any = {
 };
 
 const App: React.FC = () => {
+  const defaultQueryValue: string = "g.V().limit(1)";
   const classes: any = useStyles();
 
   const [databaseIds, setDatabaseIds] = useState([]);
@@ -60,6 +61,8 @@ const App: React.FC = () => {
       .catch(err => {
         onError(err);
       });
+
+    setQueryText(defaultQueryValue);
   }, []);
 
   const onDatabaseSelected = async (databaseId: string): Promise<void> => {
@@ -185,7 +188,11 @@ const App: React.FC = () => {
       </div>
       <div className={classes.bottom}>
         <div className={classes.editorContainer}>
-          <QueryEditor options={editorOptions} onChange={onQueryChange} />
+          <QueryEditor
+            defaultValue={defaultQueryValue}
+            options={editorOptions}
+            onChange={onQueryChange}
+          />
         </div>
         <div className={classes.resultContainer}>
           <QueryResponse
