@@ -9,9 +9,9 @@ const QueryResponse: React.FC<{ options: any; value: string }> = ({
   const editorDidMount = (
     editor: monacoEditor.editor.IStandaloneCodeEditor
   ) => {
-    editor.onDidChangeModelContent(() => {
-      editor.setPosition({ lineNumber: 0, column: 0 });
-    });
+    /* editor.onDidChangeModelContent(() => { */
+    /*   editor.setPosition({ lineNumber: 0, column: 0 }); */
+    /* }); */
   };
 
   return (
