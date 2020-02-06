@@ -131,6 +131,8 @@ const App: React.FC = () => {
   const onExecute = async (): Promise<void> => {
     let responseJson: any;
 
+    setQueryResult(null);
+
     try {
       if (!gremlinClient.isOpen) {
         await gremlinClient.open();
@@ -199,7 +201,7 @@ const App: React.FC = () => {
         <div className={classes.resultContainer}>
           <QueryResponse
             options={editorOptions}
-            value={errorText || queryResult}
+            value={queryResult || errorText}
           />
         </div>
       </div>
