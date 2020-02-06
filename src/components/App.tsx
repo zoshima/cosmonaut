@@ -19,16 +19,15 @@ const useStyles: any = makeStyles({
   bottom: { flex: 1, display: "flex" },
 
   settingsContainer: { flex: 1 },
-  editorContainer: { height: "100%", width: "100%" },
-  resultContainer: { height: "100%", width: "100%" },
+  editorContainer: { height: "100%", width: "500px" },
+  resultContainer: { height: "100%", flex: 1, flexShrik: 1 },
   submitContainer: {}
 });
 
 const editorOptions: any = {
   minimap: {
     enabled: false
-  },
-  automaticLayout: true
+  }
 };
 
 const App: React.FC = () => {
@@ -190,15 +189,15 @@ const App: React.FC = () => {
           Exec
         </Button>
       </div>
-      <div className={classes.bottom}>
-        <div className={classes.editorContainer}>
+      <div className={classes.bottom} id="bottomContainer">
+        <div className={classes.editorContainer} id="queryContainer">
           <QueryEditor
             defaultValue={defaultQueryValue}
             options={editorOptions}
             onChange={onQueryChange}
           />
         </div>
-        <div className={classes.resultContainer}>
+        <div className={classes.resultContainer} id="resultContainer">
           <QueryResponse
             options={editorOptions}
             value={queryResult || errorText}

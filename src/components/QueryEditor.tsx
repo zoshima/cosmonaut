@@ -5,6 +5,7 @@ import * as monacoEditor from "monaco-editor/esm/vs/editor/editor.api";
 import { registerRulesForLanguage } from "monaco-ace-tokenizer";
 //@ts-ignore
 import GremlinHightlightRules from "monaco-ace-tokenizer/lib/ace/definitions/groovy";
+import * as electron from "electron";
 
 const QueryEditor: React.FC<{
   options: any;
@@ -23,6 +24,28 @@ const QueryEditor: React.FC<{
     editor: monacoEditor.editor.IStandaloneCodeEditor
   ) => {
     editor.focus();
+
+    const win: electron.BrowserWindow = electron.remote.getCurrentWindow();
+    let timeout: NodeJS.Timeout;
+
+    // TODO: duplicate in QueryResponse
+    win.on("resize", () => {
+      clearTimeout(timeout);
+
+      timeout = setTimeout(() => {
+        /* const size: number[] = win.getSize(); */
+        const rootElement: HTMLElement = document.getElementById("root");
+        const size: number[] = [
+          rootElement.clientWidth,
+          rootElement.clientHeight
+        ];
+
+        editor.layout({
+          width: 500,
+          height: size[1] - 76
+        });
+      }, 500);
+    });
   };
 
   return (

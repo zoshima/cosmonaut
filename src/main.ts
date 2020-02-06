@@ -11,7 +11,7 @@ const createMainWindow = () => {
     title: "Cosmonaut",
     width: 1024,
     height: 768,
-    resizable: false
+    resizable: true
     // webPreferences: {
     //   preload: path.join(__dirname, "preload.js")
     // }
