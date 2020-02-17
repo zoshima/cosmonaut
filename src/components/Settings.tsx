@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   makeStyles,
   FormControl,
@@ -7,7 +7,7 @@ import {
   InputLabel
 } from "@material-ui/core";
 
-interface SettingsProps {
+interface SettingsInput {
   databaseIds: string[];
   containerIds: string[];
   onDatabaseSelected: (databaseId: string) => void;
@@ -22,12 +22,7 @@ const useStyles: any = makeStyles({
   }
 });
 
-const Settings: React.FC<SettingsProps> = ({
-  databaseIds,
-  containerIds,
-  onDatabaseSelected,
-  onContainerSelected
-}) => {
+const Settings: React.FC<SettingsInput> = (input: SettingsInput) => {
   const classes: any = useStyles();
 
   const [databaseId, setDatabaseId] = useState("");
@@ -39,7 +34,7 @@ const Settings: React.FC<SettingsProps> = ({
     const selectedDatabaseId: string = event.target.value;
 
     if (databaseId !== selectedDatabaseId) {
-      onDatabaseSelected(selectedDatabaseId);
+      input.onDatabaseSelected(selectedDatabaseId);
       setDatabaseId(selectedDatabaseId);
     }
   };
@@ -50,7 +45,7 @@ const Settings: React.FC<SettingsProps> = ({
     const selectedContainerId: string = event.target.value;
 
     if (containerId !== selectedContainerId) {
-      onContainerSelected(selectedContainerId);
+      input.onContainerSelected(selectedContainerId);
       setContainerId(selectedContainerId);
     }
   };
@@ -64,9 +59,9 @@ const Settings: React.FC<SettingsProps> = ({
           id="database-select"
           value={databaseId}
           onChange={onDatabaseIdChanged}
-          disabled={!(databaseIds && databaseIds.length)}
+          disabled={!(input.databaseIds && input.databaseIds.length)}
         >
-          {databaseIds.map((database: string) => {
+          {input.databaseIds.map((database: string) => {
             return (
               <MenuItem key={database} value={database}>
                 {database}
@@ -83,9 +78,9 @@ const Settings: React.FC<SettingsProps> = ({
           id="container-select"
           value={containerId}
           onChange={onContainerIdChanged}
-          disabled={!(containerIds && containerIds.length)}
+          disabled={!(input.containerIds && input.containerIds.length)}
         >
-          {containerIds.map((container: string) => {
+          {input.containerIds.map((container: string) => {
             return (
               <MenuItem key={container} value={container}>
                 {container}

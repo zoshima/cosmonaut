@@ -3,7 +3,7 @@ import fs from "fs";
 
 let mainWindow: BrowserWindow;
 
-const createMainWindow = () => {
+const createMainWindow = (): any => {
   mainWindow = new BrowserWindow({
     webPreferences: {
       nodeIntegration: true
@@ -30,7 +30,7 @@ const createMainWindow = () => {
         {
           label: "Reload",
           accelerator: "CmdOrCtrl+R",
-          click: (_: any, window: BrowserWindow) => {
+          click: (_: any, window: BrowserWindow): void => {
             window.reload();
           }
         },
@@ -40,14 +40,14 @@ const createMainWindow = () => {
         {
           label: "Close Window",
           accelerator: "CmdOrCtrl+W",
-          click: (_: any, window: BrowserWindow) => {
+          click: (_: any, window: BrowserWindow): void => {
             window.close();
           }
         },
         {
           label: "Quit Cosmonaut",
           accelerator: "CmdOrCtrl+Q",
-          click: () => {
+          click: (): void => {
             app.quit();
           }
         }

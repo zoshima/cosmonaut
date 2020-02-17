@@ -1,5 +1,7 @@
+/* eslint-disable no-undef */
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = [
   // ts (electron)
@@ -12,7 +14,7 @@ module.exports = [
         {
           test: /\.ts$/,
           include: /src/,
-          use: [ { loader: "ts-loader" } ]
+          use: [{ loader: "ts-loader" }]
         }
       ]
     },
@@ -24,15 +26,15 @@ module.exports = [
 
   // tsx (react)
   {
-    mode: 'development',
-    entry: './src/components/Index.tsx',
-    target: 'electron-renderer',
-    module: { 
+    mode: "development",
+    entry: "./src/components/Index.tsx",
+    target: "electron-renderer",
+    module: {
       rules: [
         {
           test: /\.ts(x?)$/,
           include: /src/,
-          use: [ { loader: 'ts-loader' } ]
+          use: [{ loader: "ts-loader" }]
         },
         {
           test: /\.css$/,
@@ -40,25 +42,31 @@ module.exports = [
         },
         {
           test: /\.ttf$/,
-          use: ['file-loader']
+          use: ["file-loader"]
         }
-      ] 
+      ]
     },
     output: {
-      path: __dirname + '/dist',
-      filename: 'index.js'
+      path: __dirname + "/dist",
+      filename: "index.js"
     },
     resolve: {
       extensions: [".ts", ".tsx", ".js"]
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: './index.html'
+        template: "./index.html"
       }),
       new MonacoWebpackPlugin({
         languages: ["json", "groovy"]
-      })
+      }),
+      new CopyWebpackPlugin([
+        {
+          from: "src/assets",
+          to: "assets"
+        }
+      ])
     ],
-    externals: ['utf-8-validate', 'bufferutil']
+    externals: ["utf-8-validate", "bufferutil"]
   }
 ];

@@ -3,18 +3,19 @@
     "browser": true,
     "es6": true
   },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "jsx": true,
+    "useJSXTextNode": true
+  },
   "extends": [
-    "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended"
   ],
+  "plugins": ["@typescript-eslint", "react-hooks", "react"],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
-  },
-  "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module"
   },
   "rules": {
     "indent": ["error", 2],
@@ -22,6 +23,8 @@
     "quotes": ["error", "double"],
     "semi": ["error", "always"],
     "@typescript-eslint/no-inferrable-types": "off",
-    "@typescript-eslint/indent": ["error", 2]
+    "@typescript-eslint/no-explicit-any": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }

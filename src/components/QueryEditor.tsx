@@ -1,18 +1,26 @@
 import * as React from "react";
+
 import MonacoEditor from "react-monaco-editor";
+
 import * as monacoEditor from "monaco-editor/esm/vs/editor/editor.api";
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 //@ts-ignore
 import { registerRulesForLanguage } from "monaco-ace-tokenizer";
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 //@ts-ignore
 import GremlinHightlightRules from "monaco-ace-tokenizer/lib/ace/definitions/groovy";
+
 import * as electron from "electron";
 
-const QueryEditor: React.FC<{
+interface QueryEditorInput {
   options: any;
   defaultValue: string;
   onChange: any;
-}> = ({ options, onChange, defaultValue }) => {
-  const editorWillMount = (monaco: typeof monacoEditor) => {
+}
+
+const QueryEditor: React.FC<QueryEditorInput> = (input: QueryEditorInput) => {
+  const editorWillMount = (monaco: typeof monacoEditor): void => {
     monaco.languages.register({
       id: "groovy"
     });
@@ -22,26 +30,32 @@ const QueryEditor: React.FC<{
 
   const editorDidMount = (
     editor: monacoEditor.editor.IStandaloneCodeEditor
-  ) => {
+  ): void => {
     editor.focus();
 
     const win: electron.BrowserWindow = electron.remote.getCurrentWindow();
+
     let timeout: NodeJS.Timeout;
 
     // TODO: duplicate in QueryResponse
+
     win.on("resize", () => {
       clearTimeout(timeout);
 
       timeout = setTimeout(() => {
         /* const size: number[] = win.getSize(); */
+
         const rootElement: HTMLElement = document.getElementById("root");
+
         const size: number[] = [
           rootElement.clientWidth,
+
           rootElement.clientHeight
         ];
 
         editor.layout({
           width: 500,
+
           height: size[1] - 76
         });
       }, 500);
@@ -52,9 +66,9 @@ const QueryEditor: React.FC<{
     <MonacoEditor
       language="groovy"
       theme="vs-dark"
-      defaultValue={defaultValue}
-      options={{ ...options, lineNumbers: false }}
-      onChange={onChange}
+      defaultValue={input.defaultValue}
+      options={{ ...input.options, lineNumbers: false }}
+      onChange={input.onChange}
       editorDidMount={editorDidMount}
       editorWillMount={editorWillMount}
     />

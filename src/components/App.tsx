@@ -1,23 +1,20 @@
 import * as React from "react";
-import { Environment, AppSettings } from "../environment";
 import Settings from "./Settings";
 import QueryEditor from "./QueryEditor";
 import QueryResponse from "./QueryResponse";
-import { Grid, makeStyles, Button } from "@material-ui/core";
-import { useEffect, useState } from "react";
+import { makeStyles, Button, IconButton } from "@material-ui/core";
+import SettingsIcon from "@material-ui/icons/Settings";
+import { useEffect, useState, useCallback } from "react";
 import { GremlinClientFactory, GremlinClient } from "../cosmos/gremlin-client";
 import { CosmosDatabaseClient } from "../cosmos/cosmos-database-client";
 import { CosmosClient } from "../cosmos/cosmos-client";
-//@ts-ignore
 import prettier from "prettier";
-
-const settings: AppSettings = Environment.instance.settings;
+import { Configuration } from "../models/configuration.model";
 
 const useStyles: any = makeStyles({
   grid: { display: "flex", flexDirection: "column", height: "100%" },
   top: { display: "flex", padding: "10px", diplay: "flex" },
   bottom: { flex: 1, display: "flex" },
-
   settingsContainer: { flex: 1 },
   editorContainer: { height: "100%", width: "500px" },
   resultContainer: { height: "100%", flex: 1, flexShrik: 1 },
@@ -30,28 +27,44 @@ const editorOptions: any = {
   }
 };
 
-const App: React.FC = () => {
+const prettify = (json: string): string => {
+  const prettifiedJson: string = prettier.format(json, {
+    quoteProps: "as-needed"
+  });
+
+  return prettifiedJson;
+};
+
+const App: React.FC<Configuration> = (settings: Configuration) => {
   const defaultQueryValue: string = "g.V().limit(1)";
   const classes: any = useStyles();
 
   const [databaseIds, setDatabaseIds] = useState([]);
   const [containerIds, setContainerIds] = useState([]);
-
-  const [databaseClient, setDatabaseClient] = useState(null);
+  const [, setDatabaseClient] = useState(null);
   const [gremlinClientFactory, setGremlinClientFactory] = useState(null);
   const [gremlinClient, setGremlinClient] = useState(null);
-
   const [queryText, setQueryText] = useState(null);
   const [queryResult, setQueryResult] = useState(null);
   const [errorText, setErrorText] = useState(null);
+
+  const onError = useCallback((err: any): void => {
+    console.error(err);
+
+    if (err.message) {
+      setErrorText(err.message);
+    } else {
+      setErrorText(prettify(JSON.stringify(err)));
+    }
+  }, []);
 
   useEffect(() => {
     console.log("main useEffect()");
 
     const cosmosClient: CosmosClient = new CosmosClient(
-      settings.database.hostname,
-      settings.database.port,
-      settings.database.key
+      settings.cosmos.hostname,
+      settings.cosmos.port,
+      settings.key
     );
 
     cosmosClient
@@ -64,7 +77,7 @@ const App: React.FC = () => {
       });
 
     setQueryText(defaultQueryValue);
-  }, []);
+  }, [settings, onError]);
 
   const onDatabaseSelected = async (databaseId: string): Promise<void> => {
     try {
@@ -73,17 +86,17 @@ const App: React.FC = () => {
       }
 
       const databaseClient: CosmosDatabaseClient = new CosmosDatabaseClient(
-        settings.database.hostname,
-        settings.database.port,
-        settings.database.key,
+        settings.cosmos.hostname,
+        settings.cosmos.port,
+        settings.key,
         databaseId
       );
 
       const clientFactory: GremlinClientFactory = new GremlinClientFactory(
-        settings.database.gremlin.protocol,
-        settings.database.gremlin.hostname,
-        settings.database.gremlin.port,
-        settings.database.key,
+        settings.gremlin.protocol,
+        settings.gremlin.hostname,
+        settings.gremlin.port,
+        settings.key,
         databaseId,
         true
       );
@@ -140,6 +153,7 @@ const App: React.FC = () => {
       const response: { _items: any[] } = await gremlinClient.execute(
         queryText
       );
+
       responseJson = response._items;
 
       const responseString: string = JSON.stringify(responseJson);
@@ -148,24 +162,6 @@ const App: React.FC = () => {
     } catch (err) {
       onError(err);
     }
-  };
-
-  const onError = (err: any): void => {
-    console.error(err);
-
-    if (err.message) {
-      setErrorText(err.message);
-    } else {
-      setErrorText(prettify(JSON.stringify(err)));
-    }
-  };
-
-  const prettify = (json: string): string => {
-    const prettifiedJson: string = prettier.format(json, {
-      quoteProps: "as-needed"
-    });
-
-    return prettifiedJson;
   };
 
   return (
@@ -180,15 +176,22 @@ const App: React.FC = () => {
           />
         </div>
 
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={onExecute}
-          disabled={!(gremlinClient && queryText)}
-        >
-          Exec
-        </Button>
+        <div>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={onExecute}
+            disabled={!(gremlinClient && queryText)}
+          >
+            Exec
+          </Button>
+
+          <IconButton color="primary">
+            <SettingsIcon />
+          </IconButton>
+        </div>
       </div>
+
       <div className={classes.bottom} id="bottomContainer">
         <div className={classes.editorContainer} id="queryContainer">
           <QueryEditor
@@ -197,6 +200,7 @@ const App: React.FC = () => {
             onChange={onQueryChange}
           />
         </div>
+
         <div className={classes.resultContainer} id="resultContainer">
           <QueryResponse
             options={editorOptions}
