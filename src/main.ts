@@ -86,7 +86,14 @@ const createMainWindow = (): any => {
   // mainWindow.webContents.toggleDevTools();
 };
 
-app.on("ready", createMainWindow);
+app.on("ready", () => {
+  // ensure configs folder exists
+  if (!fs.existsSync("./dist/configs")) {
+    fs.mkdirSync("./dist/configs");
+  }
+
+  createMainWindow();
+});
 
 app.on("window-all-closed", () => {
   app.quit();

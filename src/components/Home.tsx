@@ -3,51 +3,58 @@ import {
   GridList,
   GridListTile,
   IconButton,
-  GridListTileBar
+  GridListTileBar,
+  isWidthUp,
+  withWidth
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Configuration } from "../models/configuration.model";
 import LaunchIcon from "@material-ui/icons/Launch";
+import { Environment } from "../environment";
+import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
 
 const useStyles: any = makeStyles({
+  gridList: {
+    padding: "10px"
+  },
   logo: {
-    width: "100%"
+    width: "100%",
+    height: "100%"
   }
 });
 
-const _configurations: Configuration[] = [
-  {
-    title: "***REMOVED***",
-    description: "Remote",
-    img: "./assets/img/azure_logo.svg",
-    key:
-      "***REMOVED***",
-    cosmos: {
-      protocol: "https",
-      hostname: "***REMOVED***.documents.azure.com",
-      port: 443
-    },
-    gremlin: {
-      protocol: "wss",
-      hostname: "***REMOVED***.gremlin.cosmosdb.azure.com",
-      port: 443
-    }
-  }
-];
-
-console.log(_configurations);
-
-const Home: React.FC = () => {
+const Home: React.FC = (properties: any) => {
   const classes: any = useStyles();
 
-  const [configurations, setConfigurations] = useState(_configurations);
+  const [configurations] = useState(Environment.instance.configurations);
 
   useEffect(() => {
-    setConfigurations(_configurations);
+    console.log("useEffect", "Home");
   }, []);
 
+  const calculateColumns: any = (): number => {
+    const breakpointMap: any = {
+      xl: 6,
+      lg: 4,
+      md: 3,
+      sm: 2
+    };
+
+    for (const breakpoint in breakpointMap) {
+      if (isWidthUp(breakpoint as Breakpoint, properties.width)) {
+        return breakpointMap[breakpoint];
+      }
+    }
+
+    return 1;
+  };
+
   return (
-    <GridList cellHeight={150} className={classes.gridList} cols={3}>
+    <GridList
+      cellHeight={150}
+      className={classes.gridList}
+      cols={calculateColumns()}
+    >
       {configurations.map((configuration: Configuration) => {
         return (
           <GridListTile key={configuration.img} cols={1}>
@@ -76,4 +83,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default withWidth()(Home);
