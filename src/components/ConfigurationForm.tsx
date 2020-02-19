@@ -49,13 +49,14 @@ const useStyles: any = makeStyles({
 });
 
 const ConfigurationForm: React.FC = () => {
-  const { id } = useParams();
+  const params: { id?: string } = useParams();
   const classes: any = useStyles();
+  const id: string = params.id || Date.now() + "";
 
   const _configuration: Configuration =
     Environment.instance.configurations.find(
       (c: Configuration) => c.id === id
-    ) || {};
+    ) || ({ id: id } as Configuration);
 
   const [configuration, setConfiguration] = useState<Configuration>(
     _configuration
