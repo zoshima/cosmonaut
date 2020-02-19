@@ -10,6 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Configuration } from "../models/configuration.model";
 import LaunchIcon from "@material-ui/icons/Launch";
+import SettingsIcon from "@material-ui/icons/Settings";
 import { Environment } from "../environment";
 import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
 
@@ -23,7 +24,7 @@ const useStyles: any = makeStyles({
   }
 });
 
-const Home: React.FC = (properties: any) => {
+const ConfigurationList: React.FC = (properties: any) => {
   const classes: any = useStyles();
 
   const [configurations] = useState(Environment.instance.configurations);
@@ -57,7 +58,7 @@ const Home: React.FC = (properties: any) => {
     >
       {configurations.map((configuration: Configuration) => {
         return (
-          <GridListTile key={configuration.img} cols={1}>
+          <GridListTile key={configuration.id} cols={1}>
             <img
               src={configuration.img}
               alt={configuration.title}
@@ -71,8 +72,8 @@ const Home: React.FC = (properties: any) => {
                 title: classes.title
               }}
               actionIcon={
-                <IconButton>
-                  <LaunchIcon style={{ color: "white" }} />
+                <IconButton href={"#/configuration/" + configuration.id}>
+                  <SettingsIcon style={{ color: "white" }} />
                 </IconButton>
               }
             />
@@ -83,4 +84,4 @@ const Home: React.FC = (properties: any) => {
   );
 };
 
-export default withWidth()(Home);
+export default withWidth()(ConfigurationList);

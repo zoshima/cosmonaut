@@ -1,7 +1,8 @@
 export interface Configuration {
+  id: string;
   title: string;
   description: string;
-  img: string;
+  img: any;
 
   key: string;
 
