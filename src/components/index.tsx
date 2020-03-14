@@ -1,10 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core";
-import { teal, blueGrey } from "@material-ui/core/colors";
-import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import {ThemeProvider, createMuiTheme} from "@material-ui/core";
+import {teal, blueGrey} from "@material-ui/core/colors";
+import {HashRouter as Router, Route, Switch} from "react-router-dom";
 import ConfigurationList from "./ConfigurationList";
-import App from "./App";
 import ConfigurationForm from "./ConfigurationForm";
 
 const theme = createMuiTheme({
@@ -24,6 +23,9 @@ const Index = (): JSX.Element => {
     <ThemeProvider theme={theme}>
       <Router>
         <Switch>
+          <Route path="/configuration">
+            <ConfigurationForm />
+          </Route>
           <Route path="/configuration/:id">
             <ConfigurationForm />
           </Route>

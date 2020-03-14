@@ -5,14 +5,17 @@ import {
   IconButton,
   GridListTileBar,
   isWidthUp,
-  withWidth
+  withWidth,
+  Fab,
+  Link
 } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { Configuration } from "../models/configuration.model";
+import React, {useEffect, useState} from "react";
+import {Configuration} from "../models/configuration.model";
 import LaunchIcon from "@material-ui/icons/Launch";
+import AddIcon from "@material-ui/icons/Add";
 import SettingsIcon from "@material-ui/icons/Settings";
-import { Environment } from "../environment";
-import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
+import {Environment} from "../environment";
+import {Breakpoint} from "@material-ui/core/styles/createBreakpoints";
 
 const useStyles: any = makeStyles({
   gridList: {
@@ -51,36 +54,42 @@ const ConfigurationList: React.FC = (properties: any) => {
   };
 
   return (
-    <GridList
-      cellHeight={150}
-      className={classes.gridList}
-      cols={calculateColumns()}
-    >
-      {configurations.map((configuration: Configuration) => {
-        return (
-          <GridListTile key={configuration.id} cols={1}>
-            <img
-              src={configuration.img}
-              alt={configuration.title}
-              className={classes.logo}
-            />
-            <GridListTileBar
-              title={configuration.title}
-              subtitle={configuration.description}
-              classes={{
-                root: classes.titleBar,
-                title: classes.title
-              }}
-              actionIcon={
-                <IconButton href={"#/configuration/" + configuration.id}>
-                  <SettingsIcon style={{ color: "white" }} />
-                </IconButton>
-              }
-            />
-          </GridListTile>
-        );
-      })}
-    </GridList>
+    <div>
+      <GridList
+        cellHeight={150}
+        className={classes.gridList}
+        cols={calculateColumns()}
+      >
+        {configurations.map((configuration: Configuration) => {
+          return (
+            <GridListTile key={configuration.id} cols={1}>
+              <img
+                src={configuration.img}
+                alt={configuration.title}
+                className={classes.logo}
+              />
+              <GridListTileBar
+                title={configuration.title}
+                subtitle={configuration.description}
+                classes={{
+                  root: classes.titleBar,
+                  title: classes.title
+                }}
+                actionIcon={
+                  <IconButton href={"#/configuration/" + configuration.id}>
+                    <SettingsIcon style={{color: "white"}} />
+                  </IconButton>
+                }
+              />
+            </GridListTile>
+          );
+        })}
+      </GridList>
+
+      <Fab color="primary" aria-label="add" href="#/configuration">
+        <AddIcon />
+      </Fab>
+    </div>
   );
 };
 
