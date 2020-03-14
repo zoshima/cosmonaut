@@ -7,11 +7,13 @@ import {
   isWidthUp,
   withWidth,
   Fab,
-  Link
+  Link,
+  Menu,
+  MenuItem
 } from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import {Configuration} from "../models/configuration.model";
-import LaunchIcon from "@material-ui/icons/Launch";
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import AddIcon from "@material-ui/icons/Add";
 import SettingsIcon from "@material-ui/icons/Settings";
 import {Environment} from "../environment";
@@ -30,7 +32,8 @@ const useStyles: any = makeStyles({
 const ConfigurationList: React.FC = (properties: any) => {
   const classes: any = useStyles();
 
-  const [configurations] = useState(Environment.instance.configurations);
+  const [configurations, setConfigurations] = useState(Environment.instance.configurations);
+  const [menuAnchor, setMenuAnchor] = useState(null);
 
   useEffect(() => {
     console.log("useEffect", "Home");
@@ -51,6 +54,37 @@ const ConfigurationList: React.FC = (properties: any) => {
     }
 
     return 1;
+  };
+
+  const onMenuOpen = (event: React.MouseEvent, configuration: Configuration): void => {
+    console.log(event);
+    setMenuAnchor({target: event.currentTarget, configuration: configuration});
+  };
+
+  const onMenuClose = (): void => {
+    setMenuAnchor(null);
+  };
+
+  const editConfiguration = (configuration: Configuration): void => {
+    window.location.href = "#/configuration/" + configuration.id;
+    setMenuAnchor(null);
+  };
+
+  const deleteConfiguration = (configuration: Configuration): void => {
+    if (window.confirm(`Are you sure you wish to delete '${configuration.title}'?`)) {
+      Environment.instance.deleteConfiguration(configuration);
+    }
+
+    setMenuAnchor(null);
+    setConfigurations(Environment.instance.configurations);
+  };
+
+  const cloneConfiguration = (configuration: Configuration): void => {
+    const _configuration: Configuration = {...configuration, id: Date.now() + ""};
+    Environment.instance.setConfiguration(_configuration);
+
+    setMenuAnchor(null);
+    setConfigurations(Environment.instance.configurations);
   };
 
   return (
@@ -76,8 +110,9 @@ const ConfigurationList: React.FC = (properties: any) => {
                   title: classes.title
                 }}
                 actionIcon={
-                  <IconButton href={"#/configuration/" + configuration.id}>
-                    <SettingsIcon style={{color: "white"}} />
+                  /* <IconButton > */
+                  <IconButton onClick={(event: any) => onMenuOpen(event, configuration)}>
+                    <MoreVertIcon style={{color: "white"}} />
                   </IconButton>
                 }
               />
@@ -85,6 +120,16 @@ const ConfigurationList: React.FC = (properties: any) => {
           );
         })}
       </GridList>
+
+      <Menu
+        anchorEl={menuAnchor?.target}
+        open={Boolean(menuAnchor?.target)}
+        onClose={onMenuClose}
+      >
+        <MenuItem onClick={() => editConfiguration(menuAnchor.configuration)}>Edit</MenuItem>
+        <MenuItem onClick={() => cloneConfiguration(menuAnchor.configuration)}>Clone</MenuItem>
+        <MenuItem onClick={() => deleteConfiguration(menuAnchor.configuration)}>Delete</MenuItem>
+      </Menu>
 
       <Fab color="primary" href="#/configuration">
         <AddIcon />

@@ -52,7 +52,7 @@ export class Environment {
   public deleteConfiguration(configuration: Configuration): void {
     const filename: string = `${configuration.id}.json`;
 
-    fs.unlinkSync(filename);
+    fs.unlinkSync(`${Environment.path}/${filename}`);
 
     this._configurations = null; // force reload
   }
