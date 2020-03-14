@@ -1,22 +1,15 @@
 import {
   makeStyles,
-  Dialog,
-  AppBar,
   TextField,
-  Checkbox,
-  FormControlLabel,
-  Switch,
   FormGroup,
   FormControl,
   Select,
-  MenuItem,
   InputLabel,
   Card,
   CardContent,
   Typography,
   CardActions,
   Button,
-  Divider
 } from "@material-ui/core";
 import React, {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
@@ -53,7 +46,7 @@ const ConfigurationForm: React.FC = () => {
   const classes: any = useStyles();
   const id: string = params.id || Date.now() + "";
 
-  const _configuration: Configuration =
+  const configuration: Configuration =
     Environment.instance.configurations.find(
       (c: Configuration) => c.id === id
     ) || (
@@ -66,10 +59,6 @@ const ConfigurationForm: React.FC = () => {
           protocol: "ws"
         }
       } as Configuration);
-
-  const [configuration, setConfiguration] = useState<Configuration>(
-    _configuration
-  );
 
   const [errors, setErrors] = useState<{[key: string]: string}>({});
 
@@ -128,7 +117,15 @@ const ConfigurationForm: React.FC = () => {
       }
     } as Configuration;
 
-    console.log("create", _configuration);
+    if (_configuration.cosmos.hostname.indexOf("azure.com") !== -1) {
+      _configuration.img = "./assets/img/azure_logo.svg";
+    } else {
+      _configuration.img = "./assets/img/cosmosdb_logo.svg";
+    }
+
+    Environment.instance.setConfiguration(_configuration);
+
+    window.location.href = "#/";
   };
 
   useEffect(() => {
@@ -249,7 +246,6 @@ const ConfigurationForm: React.FC = () => {
           </CardContent>
           <CardActions className={classes.cardActions}>
             <Button href="#/">Cancel</Button>
-            {JSON.stringify(Object.keys(errors).length)}
             <Button type="submit" variant="contained" color="primary" disabled={!!Object.keys(errors).length}>
               Submit
             </Button>

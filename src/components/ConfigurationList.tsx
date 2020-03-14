@@ -86,7 +86,7 @@ const ConfigurationList: React.FC = (properties: any) => {
         })}
       </GridList>
 
-      <Fab color="primary" aria-label="add" href="#/configuration">
+      <Fab color="primary" href="#/configuration">
         <AddIcon />
       </Fab>
     </div>

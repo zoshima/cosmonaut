@@ -23,10 +23,10 @@ const Index = (): JSX.Element => {
     <ThemeProvider theme={theme}>
       <Router>
         <Switch>
-          <Route path="/configuration">
+          <Route path="/configuration/:id">
             <ConfigurationForm />
           </Route>
-          <Route path="/configuration/:id">
+          <Route path="/configuration">
             <ConfigurationForm />
           </Route>
           <Route path="/">

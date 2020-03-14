@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { Configuration } from "./models/configuration.model";
+import {Configuration} from "./models/configuration.model";
 
 export class Environment {
   private static path: string = "./dist/configs"; // TODO: why is path not relative to /dist?
@@ -35,5 +35,25 @@ export class Environment {
     }
 
     return this._configurations;
+  }
+
+  public setConfiguration(configuration: Configuration): void {
+    const filename: string = `${configuration.id}.json`;
+    const content: string = JSON.stringify(configuration);
+
+    fs.writeFileSync(`${Environment.path}/${filename}`,
+      content,
+      "utf8"
+    );
+
+    this._configurations = null; // force reload
+  }
+
+  public deleteConfiguration(configuration: Configuration): void {
+    const filename: string = `${configuration.id}.json`;
+
+    fs.unlinkSync(filename);
+
+    this._configurations = null; // force reload
   }
 }
