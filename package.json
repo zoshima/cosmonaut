@@ -4,10 +4,11 @@
   "description": "",
   "main": "main.js",
   "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "electron": "electron ./dist/main.js",
     "start": "webpack && electron ./dist/main.js",
-    "serve": "webpack --watch & electron ./dist/main.js",
-    "webpack": "webpack --watch",
-    "electron": "electron ./dist/main.js"
+    "serve": "webpack --watch & electron ./dist/main.js"
   },
   "author": "",
   "license": "ISC",

@@ -2,3 +2,7 @@ node_modules/
 dist/
 yarn-error.log
 appsettings.json
+
+.pnp.js
+.yarn/cache
+.yarn/build-state.yml
