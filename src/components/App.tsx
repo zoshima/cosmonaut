@@ -2,22 +2,24 @@ import * as React from "react";
 import Settings from "./Settings";
 import QueryEditor from "./QueryEditor";
 import QueryResponse from "./QueryResponse";
-import { makeStyles, Button, IconButton } from "@material-ui/core";
+import {makeStyles, Button, IconButton} from "@material-ui/core";
 import SettingsIcon from "@material-ui/icons/Settings";
-import { useEffect, useState, useCallback } from "react";
-import { GremlinClientFactory, GremlinClient } from "../cosmos/gremlin-client";
-import { CosmosDatabaseClient } from "../cosmos/cosmos-database-client";
-import { CosmosClient } from "../cosmos/cosmos-client";
+import {useEffect, useState, useCallback} from "react";
+import {GremlinClientFactory, GremlinClient} from "../cosmos/gremlin-client";
+import {CosmosDatabaseClient} from "../cosmos/cosmos-database-client";
+import {CosmosClient} from "../cosmos/cosmos-client";
 import prettier from "prettier";
-import { Configuration } from "../models/configuration.model";
+import {Configuration} from "../models/configuration.model";
+import {useParams} from "react-router-dom";
+import {Environment} from "../environment";
 
 const useStyles: any = makeStyles({
-  grid: { display: "flex", flexDirection: "column", height: "100%" },
-  top: { display: "flex", padding: "10px", diplay: "flex" },
-  bottom: { flex: 1, display: "flex" },
-  settingsContainer: { flex: 1 },
-  editorContainer: { height: "100%", width: "500px" },
-  resultContainer: { height: "100%", flex: 1, flexShrik: 1 },
+  grid: {display: "flex", flexDirection: "column", height: "100%"},
+  top: {display: "flex", padding: "10px", diplay: "flex"},
+  bottom: {flex: 1, display: "flex"},
+  settingsContainer: {flex: 1},
+  editorContainer: {height: "100%", width: "500px"},
+  resultContainer: {height: "100%", flex: 1, flexShrik: 1},
   submitContainer: {}
 });
 
@@ -35,9 +37,15 @@ const prettify = (json: string): string => {
   return prettifiedJson;
 };
 
-const App: React.FC<Configuration> = (settings: Configuration) => {
+const App: React.FC = () => {
+  const params: {id?: string} = useParams();
   const defaultQueryValue: string = "g.V().limit(1)";
   const classes: any = useStyles();
+
+  const settings: Configuration =
+    Environment.instance.configurations.find(
+      (c: Configuration) => c.id === params.id
+    );
 
   const [databaseIds, setDatabaseIds] = useState([]);
   const [containerIds, setContainerIds] = useState([]);
@@ -150,7 +158,7 @@ const App: React.FC<Configuration> = (settings: Configuration) => {
         await gremlinClient.open();
       }
 
-      const response: { _items: any[] } = await gremlinClient.execute(
+      const response: {_items: any[]} = await gremlinClient.execute(
         queryText
       );
 

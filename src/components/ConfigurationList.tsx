@@ -7,15 +7,16 @@ import {
   isWidthUp,
   withWidth,
   Fab,
-  Link,
   Menu,
-  MenuItem
+  MenuItem,
+  useTheme,
+  Theme
 } from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import {Configuration} from "../models/configuration.model";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import LaunchIcon from '@material-ui/icons/Launch';
 import AddIcon from "@material-ui/icons/Add";
-import SettingsIcon from "@material-ui/icons/Settings";
 import {Environment} from "../environment";
 import {Breakpoint} from "@material-ui/core/styles/createBreakpoints";
 
@@ -26,11 +27,17 @@ const useStyles: any = makeStyles({
   logo: {
     width: "100%",
     height: "100%"
+  },
+  floatingButton: {
+    position: "fixed",
+    bottom: "30px",
+    right: "30px"
   }
 });
 
 const ConfigurationList: React.FC = (properties: any) => {
   const classes: any = useStyles();
+  const theme: Theme = useTheme();
 
   const [configurations, setConfigurations] = useState(Environment.instance.configurations);
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -110,10 +117,14 @@ const ConfigurationList: React.FC = (properties: any) => {
                   title: classes.title
                 }}
                 actionIcon={
-                  /* <IconButton > */
-                  <IconButton onClick={(event: any) => onMenuOpen(event, configuration)}>
-                    <MoreVertIcon style={{color: "white"}} />
-                  </IconButton>
+                  <div>
+                    <IconButton href={"#/app/" + configuration.id}>
+                      <LaunchIcon style={{color: theme.palette.primary.main}} />
+                    </IconButton>
+                    <IconButton onClick={(event: any) => onMenuOpen(event, configuration)}>
+                      <MoreVertIcon style={{color: "white"}} />
+                    </IconButton>
+                  </div>
                 }
               />
             </GridListTile>
@@ -131,7 +142,7 @@ const ConfigurationList: React.FC = (properties: any) => {
         <MenuItem onClick={() => deleteConfiguration(menuAnchor.configuration)}>Delete</MenuItem>
       </Menu>
 
-      <Fab color="primary" href="#/configuration">
+      <Fab color="primary" href="#/configuration" className={classes.floatingButton}>
         <AddIcon />
       </Fab>
     </div>

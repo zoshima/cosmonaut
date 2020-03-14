@@ -5,6 +5,7 @@ import {teal, blueGrey} from "@material-ui/core/colors";
 import {HashRouter as Router, Route, Switch} from "react-router-dom";
 import ConfigurationList from "./ConfigurationList";
 import ConfigurationForm from "./ConfigurationForm";
+import App from "./App";
 
 const theme = createMuiTheme({
   palette: {
@@ -28,6 +29,9 @@ const Index = (): JSX.Element => {
           </Route>
           <Route path="/configuration">
             <ConfigurationForm />
+          </Route>
+          <Route path="/app/:id">
+            <App />
           </Route>
           <Route path="/">
             <ConfigurationList />
