@@ -2,8 +2,9 @@ import * as React from "react";
 import Settings from "./Settings";
 import QueryEditor from "./QueryEditor";
 import QueryResponse from "./QueryResponse";
-import {makeStyles, Button, IconButton} from "@material-ui/core";
-import SettingsIcon from "@material-ui/icons/Settings";
+import {makeStyles, Button, IconButton, Fab} from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import SendIcon from "@material-ui/icons/Send";
 import {useEffect, useState, useCallback} from "react";
 import {GremlinClientFactory, GremlinClient} from "../cosmos/gremlin-client";
 import {CosmosDatabaseClient} from "../cosmos/cosmos-database-client";
@@ -15,12 +16,18 @@ import {Environment} from "../environment";
 
 const useStyles: any = makeStyles({
   grid: {display: "flex", flexDirection: "column", height: "100%"},
-  top: {display: "flex", padding: "10px", diplay: "flex"},
+  top: {display: "flex", padding: "10px", diplay: "flex", borderBottom: "1px solid gray"},
   bottom: {flex: 1, display: "flex"},
   settingsContainer: {flex: 1},
   editorContainer: {height: "100%", width: "500px"},
   resultContainer: {height: "100%", flex: 1, flexShrik: 1},
-  submitContainer: {}
+  submitContainer: {},
+  floatingButton: {
+    zIndex: 1,
+    position: "fixed",
+    bottom: "30px",
+    right: "30px"
+  }
 });
 
 const editorOptions: any = {
@@ -184,20 +191,9 @@ const App: React.FC = () => {
           />
         </div>
 
-        <div>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={onExecute}
-            disabled={!(gremlinClient && queryText)}
-          >
-            Exec
-          </Button>
-
-          <IconButton color="primary">
-            <SettingsIcon />
-          </IconButton>
-        </div>
+        <IconButton color="primary" onClick={() => window.location.href = "#/"}>
+          <CloseIcon />
+        </IconButton>
       </div>
 
       <div className={classes.bottom} id="bottomContainer">
@@ -207,6 +203,13 @@ const App: React.FC = () => {
             options={editorOptions}
             onChange={onQueryChange}
           />
+
+          <Fab color="primary"
+            onClick={onExecute}
+            disabled={!(gremlinClient && queryText)}
+            className={classes.floatingButton}>
+            <SendIcon />
+          </Fab>
         </div>
 
         <div className={classes.resultContainer} id="resultContainer">
