@@ -18,7 +18,6 @@ const createMainWindow = (): any => {
     // }
   });
 
-
   mainWindow.loadFile("index.html");
 
   mainWindow.on("closed", () => {

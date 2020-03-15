@@ -6,7 +6,7 @@ import * as monacoEditor from "monaco-editor/esm/vs/editor/editor.api";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 //@ts-ignore
-import { registerRulesForLanguage } from "monaco-ace-tokenizer";
+import {registerRulesForLanguage} from "monaco-ace-tokenizer";
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 //@ts-ignore
 import GremlinHightlightRules from "monaco-ace-tokenizer/lib/ace/definitions/groovy";
@@ -14,12 +14,24 @@ import GremlinHightlightRules from "monaco-ace-tokenizer/lib/ace/definitions/gro
 import * as electron from "electron";
 
 interface QueryEditorInput {
-  options: any;
   defaultValue: string;
   onChange: any;
 }
 
 const QueryEditor: React.FC<QueryEditorInput> = (input: QueryEditorInput) => {
+  const align = (editor: monacoEditor.editor.IStandaloneCodeEditor): void => {
+    const win: electron.BrowserWindow = electron.remote.getCurrentWindow();
+    const winSize: number[] = win.getSize();
+
+    console.log("getSize", winSize);
+    console.log("getbounds", win.getBounds());
+
+    editor.layout({
+      width: 500,
+      height: winSize[1] - 80 - 64
+    });
+  };
+
   const editorWillMount = (monaco: typeof monacoEditor): void => {
     monaco.languages.register({
       id: "groovy"
@@ -32,32 +44,16 @@ const QueryEditor: React.FC<QueryEditorInput> = (input: QueryEditorInput) => {
     editor: monacoEditor.editor.IStandaloneCodeEditor
   ): void => {
     editor.focus();
+    align(editor);
 
     const win: electron.BrowserWindow = electron.remote.getCurrentWindow();
-
     let timeout: NodeJS.Timeout;
-
-    // TODO: duplicate in QueryResponse
 
     win.on("resize", () => {
       clearTimeout(timeout);
 
       timeout = setTimeout(() => {
-        /* const size: number[] = win.getSize(); */
-
-        const rootElement: HTMLElement = document.getElementById("root");
-
-        const size: number[] = [
-          rootElement.clientWidth,
-
-          rootElement.clientHeight
-        ];
-
-        editor.layout({
-          width: 500,
-
-          height: size[1] - 76
-        });
+        align(editor);
       }, 500);
     });
   };
@@ -67,7 +63,6 @@ const QueryEditor: React.FC<QueryEditorInput> = (input: QueryEditorInput) => {
       language="groovy"
       theme="vs-dark"
       defaultValue={input.defaultValue}
-      options={{ ...input.options, lineNumbers: false }}
       onChange={input.onChange}
       editorDidMount={editorDidMount}
       editorWillMount={editorWillMount}

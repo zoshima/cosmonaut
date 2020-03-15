@@ -2,37 +2,37 @@ import * as React from "react";
 import MonacoEditor from "react-monaco-editor";
 import * as monacoEditor from "monaco-editor/esm/vs/editor/editor.api";
 import * as electron from "electron";
+import {Environment} from "../environment";
 
-const QueryResponse: React.FC<{ options: any; value: string }> = ({
-  options,
+const QueryResponse: React.FC<{value: string}> = ({
   value
 }) => {
+  const align = (editor: monacoEditor.editor.IStandaloneCodeEditor): void => {
+    const win: electron.BrowserWindow = electron.remote.getCurrentWindow();
+    const winSize: number[] = win.getSize();
+
+    editor.layout({
+      width: winSize[0] - 500,
+      height: winSize[1] - 80 - 64
+    });
+  };
+
   const editorDidMount = (
     editor: monacoEditor.editor.IStandaloneCodeEditor
   ) => {
     /* editor.onDidChangeModelContent(() => { */
     /*   editor.setPosition({ lineNumber: 0, column: 0 }); */
     /* }); */
+    align(editor);
 
     const win: electron.BrowserWindow = electron.remote.getCurrentWindow();
     let timeout: NodeJS.Timeout;
 
-    // TODO: duplicate in QueryEditor
     win.on("resize", () => {
       clearTimeout(timeout);
 
       timeout = setTimeout(() => {
-        /* const size: number[] = win.getSize(); */
-        const rootElement: HTMLElement = document.getElementById("root");
-        const size: number[] = [
-          rootElement.clientWidth,
-          rootElement.clientHeight
-        ];
-
-        editor.layout({
-          width: size[0] - 500,
-          height: size[1] - 76
-        });
+        align(editor);
       }, 500);
     });
   };
@@ -42,7 +42,7 @@ const QueryResponse: React.FC<{ options: any; value: string }> = ({
       language="json"
       theme="vs-dark"
       value={value}
-      options={{ ...options, readOnly: true }}
+      options={{readOnly: true}}
       editorDidMount={editorDidMount}
     />
   );

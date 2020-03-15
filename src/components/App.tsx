@@ -2,8 +2,7 @@ import * as React from "react";
 import Settings from "./Settings";
 import QueryEditor from "./QueryEditor";
 import QueryResponse from "./QueryResponse";
-import {makeStyles, Button, IconButton, Fab} from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
+import {makeStyles, Fab, createStyles, Theme} from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import {useEffect, useState, useCallback} from "react";
 import {GremlinClientFactory, GremlinClient} from "../cosmos/gremlin-client";
@@ -15,27 +14,28 @@ import {useParams} from "react-router-dom";
 import {Environment} from "../environment";
 import TitleBar from "./TitleBar";
 
-const useStyles: any = makeStyles({
-  grid: {display: "flex", flexDirection: "column", height: "100%"},
-  top: {display: "flex", padding: "10px", diplay: "flex", borderBottom: "1px solid gray"},
-  bottom: {flex: 1, display: "flex"},
-  settingsContainer: {flex: 1},
-  editorContainer: {height: "100%", width: "500px"},
-  resultContainer: {height: "100%", flex: 1, flexShrik: 1},
-  submitContainer: {},
-  floatingButton: {
-    zIndex: 1,
-    position: "fixed",
-    bottom: "30px",
-    right: "30px"
-  }
-});
-
-const editorOptions: any = {
-  minimap: {
-    enabled: false
-  }
-};
+const useStyles: any = makeStyles((theme: Theme) =>
+  createStyles({
+    grid: {display: "flex", flexDirection: "column"},
+    top: {
+      display: "flex",
+      padding: theme.spacing(1),
+      diplay: "flex",
+      background: theme.palette.background.paper
+    },
+    bottom: {flex: 1, display: "flex"},
+    editorContainer: {},
+    resultContainer: {},
+    submitContainer: {},
+    bottomContainer: {},
+    floatingButton: {
+      zIndex: 1,
+      position: "fixed",
+      bottom: "30px",
+      right: "30px"
+    }
+  })
+);
 
 const prettify = (json: string): string => {
   const prettifiedJson: string = prettier.format(json, {
@@ -183,26 +183,20 @@ const App: React.FC = () => {
   return (
     <div className={classes.grid}>
       <TitleBar showBack={true} title={settings.title} />
-      <div className={classes.top}>
-        <div className={classes.settingsContainer}>
-          <Settings
-            databaseIds={databaseIds}
-            containerIds={containerIds}
-            onDatabaseSelected={onDatabaseSelected}
-            onContainerSelected={onContainerSelected}
-          />
-        </div>
 
-        <IconButton color="primary" onClick={() => window.location.href = "#/"}>
-          <CloseIcon />
-        </IconButton>
+      <div className={classes.top}>
+        <Settings
+          databaseIds={databaseIds}
+          containerIds={containerIds}
+          onDatabaseSelected={onDatabaseSelected}
+          onContainerSelected={onContainerSelected}
+        />
       </div>
 
       <div className={classes.bottom} id="bottomContainer">
         <div className={classes.editorContainer} id="queryContainer">
           <QueryEditor
             defaultValue={defaultQueryValue}
-            options={editorOptions}
             onChange={onQueryChange}
           />
 
@@ -216,7 +210,6 @@ const App: React.FC = () => {
 
         <div className={classes.resultContainer} id="resultContainer">
           <QueryResponse
-            options={editorOptions}
             value={queryResult || errorText}
           />
         </div>

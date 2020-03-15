@@ -9,8 +9,8 @@ import {
   Fab,
   Menu,
   MenuItem,
-  useTheme,
-  Theme
+  Theme,
+  createStyles
 } from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import {Configuration} from "../models/configuration.model";
@@ -22,24 +22,25 @@ import {Breakpoint} from "@material-ui/core/styles/createBreakpoints";
 import TitleBar from "./TitleBar";
 import ConfigurationForm from "./ConfigurationForm";
 
-const useStyles: any = makeStyles({
-  gridList: {
-    padding: "10px"
-  },
-  logo: {
-    width: "100%",
-    height: "100%"
-  },
-  floatingButton: {
-    position: "fixed",
-    bottom: "30px",
-    right: "30px"
-  }
-});
+const useStyles: any = makeStyles((theme: Theme) =>
+  createStyles({
+    gridList: {
+      padding: theme.spacing(1)
+    },
+    logo: {
+      width: "100%",
+      height: "100%"
+    },
+    floatingButton: {
+      position: "fixed",
+      bottom: "30px",
+      right: "30px"
+    }
+  })
+);
 
 const ConfigurationList: React.FC = (properties: any) => {
   const classes: any = useStyles();
-  const theme: Theme = useTheme();
 
   const [configurations, setConfigurations] = useState(Environment.instance.configurations);
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -137,10 +138,10 @@ const ConfigurationList: React.FC = (properties: any) => {
                 actionIcon={
                   <div>
                     <IconButton href={"#/app/" + configuration.id}>
-                      <LaunchIcon style={{color: theme.palette.primary.main}} />
+                      <LaunchIcon />
                     </IconButton>
                     <IconButton onClick={(event: any) => openMenu(event, configuration)}>
-                      <MoreVertIcon style={{color: "white"}} />
+                      <MoreVertIcon />
                     </IconButton>
                   </div>
                 }

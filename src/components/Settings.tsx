@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
   makeStyles,
   FormControl,
   Select,
   MenuItem,
-  InputLabel
+  InputLabel,
+  Toolbar,
+  createStyles,
+  Theme
 } from "@material-ui/core";
 
 interface SettingsInput {
@@ -14,13 +17,14 @@ interface SettingsInput {
   onContainerSelected: (databaseId: string) => void;
 }
 
-const useStyles: any = makeStyles({
-  form: {},
-  formControl: {
-    width: "200px",
-    marginRight: "10px"
-  }
-});
+const useStyles: any = makeStyles((theme: Theme) =>
+  createStyles({
+    formControl: {
+      width: "200px",
+      marginRight: theme.spacing(1)
+    }
+  })
+);
 
 const Settings: React.FC<SettingsInput> = (input: SettingsInput) => {
   const classes: any = useStyles();
@@ -29,7 +33,7 @@ const Settings: React.FC<SettingsInput> = (input: SettingsInput) => {
   const [containerId, setContainerId] = useState("");
 
   const onDatabaseIdChanged = async (
-    event: React.ChangeEvent<{ value: string }>
+    event: React.ChangeEvent<{value: string}>
   ): Promise<void> => {
     const selectedDatabaseId: string = event.target.value;
 
@@ -40,7 +44,7 @@ const Settings: React.FC<SettingsInput> = (input: SettingsInput) => {
   };
 
   const onContainerIdChanged = async (
-    event: React.ChangeEvent<{ value: string }>
+    event: React.ChangeEvent<{value: string}>
   ): Promise<void> => {
     const selectedContainerId: string = event.target.value;
 
@@ -51,7 +55,7 @@ const Settings: React.FC<SettingsInput> = (input: SettingsInput) => {
   };
 
   return (
-    <form autoComplete="off" className={classes.form}>
+    <Toolbar id="tool-bar" className={classes.toolbar}>
       <FormControl className={classes.formControl} variant="outlined">
         <InputLabel id="database-input-label">Database</InputLabel>
         <Select
@@ -89,7 +93,7 @@ const Settings: React.FC<SettingsInput> = (input: SettingsInput) => {
           })}
         </Select>
       </FormControl>
-    </form>
+    </Toolbar>
   );
 };
 
