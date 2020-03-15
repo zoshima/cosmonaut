@@ -21,7 +21,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
       display: "flex",
       padding: theme.spacing(1),
       diplay: "flex",
-      background: theme.palette.background.paper
     },
     bottom: {flex: 1, display: "flex"},
     editorContainer: {},

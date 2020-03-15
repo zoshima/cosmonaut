@@ -42,7 +42,7 @@ const QueryResponse: React.FC<{value: string}> = ({
       language="json"
       theme="vs-dark"
       value={value}
-      options={{readOnly: true}}
+      options={{readOnly: true, minimap: {enabled: false}}}
       editorDidMount={editorDidMount}
     />
   );

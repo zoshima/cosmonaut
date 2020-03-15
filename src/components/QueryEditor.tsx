@@ -66,6 +66,7 @@ const QueryEditor: React.FC<QueryEditorInput> = (input: QueryEditorInput) => {
       onChange={input.onChange}
       editorDidMount={editorDidMount}
       editorWillMount={editorWillMount}
+      options={{minimap: {enabled: false}}}
     />
   );
 };

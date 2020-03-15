@@ -56,7 +56,7 @@ const Settings: React.FC<SettingsInput> = (input: SettingsInput) => {
 
   return (
     <Toolbar id="tool-bar" className={classes.toolbar}>
-      <FormControl className={classes.formControl} variant="outlined">
+      <FormControl className={classes.formControl} variant="filled">
         <InputLabel id="database-input-label">Database</InputLabel>
         <Select
           labelId="database-input-label"
@@ -75,7 +75,7 @@ const Settings: React.FC<SettingsInput> = (input: SettingsInput) => {
         </Select>
       </FormControl>
 
-      <FormControl className={classes.formControl} variant="outlined">
+      <FormControl className={classes.formControl} variant="filled">
         <InputLabel id="container-input-label">Container</InputLabel>
         <Select
           labelId="container-input-label"
