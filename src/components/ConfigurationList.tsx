@@ -67,7 +67,7 @@ const ConfigurationList: React.FC = (properties: any) => {
     return 1;
   };
 
-  const openDialog = (configuration?: Configuration = null): void => {
+  const openDialog = (configuration?: Configuration): void => {
     setIsDialogOpen(configuration || true);
   };
 

@@ -5,21 +5,16 @@ import {
   FormControl,
   Select,
   InputLabel,
-  Card,
-  CardContent,
   Typography,
-  CardActions,
   Button,
 } from "@material-ui/core";
 import React, {useState, useEffect} from "react";
-import {useParams} from "react-router-dom";
 import {Configuration} from "../models/configuration.model";
 import {Environment} from "../environment";
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles: any = makeStyles({

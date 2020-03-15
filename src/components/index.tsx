@@ -4,7 +4,6 @@ import {ThemeProvider, createMuiTheme} from "@material-ui/core";
 import {teal, blueGrey} from "@material-ui/core/colors";
 import {HashRouter as Router, Route, Switch} from "react-router-dom";
 import ConfigurationList from "./ConfigurationList";
-import ConfigurationForm from "./ConfigurationForm";
 import App from "./App";
 
 const theme = createMuiTheme({
