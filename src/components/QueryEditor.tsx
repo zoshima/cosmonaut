@@ -23,9 +23,6 @@ const QueryEditor: React.FC<QueryEditorInput> = (input: QueryEditorInput) => {
     const win: electron.BrowserWindow = electron.remote.getCurrentWindow();
     const winSize: number[] = win.getSize();
 
-    console.log("getSize", winSize);
-    console.log("getbounds", win.getBounds());
-
     editor.layout({
       width: 500,
       height: winSize[1] - 80 - 64
