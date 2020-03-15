@@ -16,35 +16,32 @@ import {useParams} from "react-router-dom";
 import {Configuration} from "../models/configuration.model";
 import {Environment} from "../environment";
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 const useStyles: any = makeStyles({
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "50px"
-  },
-  card: {
+  form: {
     width: "500px"
-  },
-  cardActions: {
-    display: "flex",
-    justifyContent: "flex-end"
   },
   formSectionTitle: {
     marginTop: "30px",
     marginBottom: "15px",
     fontSize: "1.2em"
   },
-  cardContent: {},
-  form: {},
-  formGroup: {
-    paddingLeft: "15px"
-  }
 });
 
-const ConfigurationForm: React.FC = () => {
-  const params: {id?: string} = useParams();
+interface ConfigurationFormInput {
+  id?: string;
+  isOpen: boolean;
+  onClose: any; //function
+}
+
+const ConfigurationForm: React.FC<ConfigurationFormInput> = (input: ConfigurationFormInput) => {
   const classes: any = useStyles();
-  const id: string = params.id || Date.now() + "";
+  const id: string = input.id || Date.now() + "";
 
   const configuration: Configuration =
     Environment.instance.configurations.find(
@@ -74,7 +71,13 @@ const ConfigurationForm: React.FC = () => {
     setErrors(_errors);
   };
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+  const onClose = (): void => {
+    setErrors({});
+
+    input.onClose();
+  };
+
+  const submitForm = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
     if (Object.keys(errors).length) {
@@ -125,7 +128,7 @@ const ConfigurationForm: React.FC = () => {
 
     Environment.instance.setConfiguration(_configuration);
 
-    window.location.href = "#/";
+    input.onClose(true);
   };
 
   useEffect(() => {
@@ -133,126 +136,132 @@ const ConfigurationForm: React.FC = () => {
   }, []);
 
   return (
-    <div className={classes.container}>
-      <form className={classes.form} noValidate autoComplete="off" onSubmit={onSubmit}>
-        <Card className={classes.card}>
-          <CardContent className={classes.cardContent}>
-            <FormGroup className={classes.formGroup}>
-              <TextField
-                required
-                id="title"
-                label="Title"
-                onChange={onChange}
-                error={!!errors["title"]}
-                defaultValue={configuration.title}
-              />
-              <TextField
-                required
-                id="description"
-                label="Description"
-                onChange={onChange}
-                error={!!errors["description"]}
-                defaultValue={configuration.description}
-              />
-              <TextField
-                required
-                id="key"
-                label="Key"
-                onChange={onChange}
-                error={!!errors["key"]}
-                defaultValue={configuration.key}
-              />
-            </FormGroup>
+    <Dialog open={input.isOpen} onClose={onClose}>
+      <form className={classes.form} noValidate autoComplete="off" onSubmit={submitForm}>
+        <DialogTitle>
+          {!!input.id
+            ? <span>Edit configuration</span>
+            : <span>New configuration</span>
+          }
+        </DialogTitle>
 
-            <Typography
-              className={classes.formSectionTitle}
-              color="textPrimary"
-              gutterBottom
-            >
-              Cosmos
-            </Typography>
+        <DialogContent>
+          <FormGroup className={classes.formGroup}>
+            <TextField
+              required
+              id="title"
+              label="Title"
+              onChange={onChange}
+              error={!!errors["title"]}
+              defaultValue={configuration.title}
+            />
+            <TextField
+              required
+              id="description"
+              label="Description"
+              onChange={onChange}
+              error={!!errors["description"]}
+              defaultValue={configuration.description}
+            />
+            <TextField
+              required
+              id="key"
+              label="Key"
+              onChange={onChange}
+              error={!!errors["key"]}
+              defaultValue={configuration.key}
+            />
+          </FormGroup>
 
-            <FormGroup className={classes.formGroup}>
-              <FormControl>
-                <InputLabel>Protocol</InputLabel>
-                <Select
-                  native
-                  id="cosmos-protocol"
-                  defaultValue={configuration.cosmos.protocol}
-                >
-                  <option value="http">http</option>
-                  <option value="https">https</option>
-                </Select>
-              </FormControl>
+          <Typography
+            className={classes.formSectionTitle}
+            color="textPrimary"
+            gutterBottom
+          >
+            Cosmos
+          </Typography>
 
-              <TextField
-                required
-                id="cosmos-hostname"
-                label="Hostname"
-                onChange={onChange}
-                error={!!errors["cosmos-hostname"]}
-                defaultValue={configuration.cosmos.hostname}
-              />
-              <TextField
-                required
-                id="cosmos-port"
-                label="Port"
-                type="number"
-                onChange={onChange}
-                error={!!errors["cosmos-port"]}
-                defaultValue={configuration.cosmos.port}
-              />
-            </FormGroup>
+          <FormGroup className={classes.formGroup}>
+            <FormControl>
+              <InputLabel>Protocol</InputLabel>
+              <Select
+                native
+                id="cosmos-protocol"
+                defaultValue={configuration.cosmos.protocol}
+              >
+                <option value="http">http</option>
+                <option value="https">https</option>
+              </Select>
+            </FormControl>
 
-            <Typography
-              className={classes.formSectionTitle}
-              color="textPrimary"
-              gutterBottom
-            >
-              Gremlin
-            </Typography>
+            <TextField
+              required
+              id="cosmos-hostname"
+              label="Hostname"
+              onChange={onChange}
+              error={!!errors["cosmos-hostname"]}
+              defaultValue={configuration.cosmos.hostname}
+            />
+            <TextField
+              required
+              id="cosmos-port"
+              label="Port"
+              type="number"
+              onChange={onChange}
+              error={!!errors["cosmos-port"]}
+              defaultValue={configuration.cosmos.port}
+            />
+          </FormGroup>
 
-            <FormGroup className={classes.formGroup}>
-              <FormControl>
-                <InputLabel>Protocol</InputLabel>
-                <Select
-                  native
-                  id="gremlin-protocol"
-                  defaultValue={configuration.gremlin.protocol}
-                >
-                  <option value="ws">ws</option>
-                  <option value="wss">wss</option>
-                </Select>
-              </FormControl>
+          <Typography
+            className={classes.formSectionTitle}
+            color="textPrimary"
+            gutterBottom
+          >
+            Gremlin
+          </Typography>
 
-              <TextField
-                required
-                id="gremlin-hostname"
-                label="Hostname"
-                onChange={onChange}
-                error={!!errors["gremlin-hostname"]}
-                defaultValue={configuration.gremlin.hostname}
-              />
-              <TextField
-                required
-                id="gremlin-port"
-                label="Port"
-                type="number"
-                onChange={onChange}
-                error={!!errors["gremlin-port"]}
-                defaultValue={configuration.gremlin.port}
-              />
-            </FormGroup>
-          </CardContent>
-          <CardActions className={classes.cardActions}>
-            <Button href="#/">Cancel</Button>
-            <Button type="submit" variant="contained" color="primary" disabled={!!Object.keys(errors).length}>
-              Submit
-            </Button>
-          </CardActions>
-        </Card>
+          <FormGroup className={classes.formGroup}>
+            <FormControl>
+              <InputLabel>Protocol</InputLabel>
+              <Select
+                native
+                id="gremlin-protocol"
+                defaultValue={configuration.gremlin.protocol}
+              >
+                <option value="ws">ws</option>
+                <option value="wss">wss</option>
+              </Select>
+            </FormControl>
+
+            <TextField
+              required
+              id="gremlin-hostname"
+              label="Hostname"
+              onChange={onChange}
+              error={!!errors["gremlin-hostname"]}
+              defaultValue={configuration.gremlin.hostname}
+            />
+            <TextField
+              required
+              id="gremlin-port"
+              label="Port"
+              type="number"
+              onChange={onChange}
+              error={!!errors["gremlin-port"]}
+              defaultValue={configuration.gremlin.port}
+            />
+          </FormGroup>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={onClose}>Cancel</Button>
+          <Button type="submit" variant="contained" color="primary" disabled={!!Object.keys(errors).length}>
+            Submit
+          </Button>
+        </DialogActions>
       </form>
-    </div>
+    </Dialog>
   );
 };
 

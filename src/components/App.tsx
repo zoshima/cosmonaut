@@ -13,6 +13,7 @@ import prettier from "prettier";
 import {Configuration} from "../models/configuration.model";
 import {useParams} from "react-router-dom";
 import {Environment} from "../environment";
+import TitleBar from "./TitleBar";
 
 const useStyles: any = makeStyles({
   grid: {display: "flex", flexDirection: "column", height: "100%"},
@@ -181,6 +182,7 @@ const App: React.FC = () => {
 
   return (
     <div className={classes.grid}>
+      <TitleBar showBack={true} title={settings.title} />
       <div className={classes.top}>
         <div className={classes.settingsContainer}>
           <Settings

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu } from "electron";
+import {app, BrowserWindow, Menu} from "electron";
 import fs from "fs";
 
 let mainWindow: BrowserWindow;
@@ -11,11 +11,13 @@ const createMainWindow = (): any => {
     title: "Cosmonaut",
     width: 1024,
     height: 768,
-    resizable: true
+    resizable: true,
+    frame: false
     // webPreferences: {
     //   preload: path.join(__dirname, "preload.js")
     // }
   });
+
 
   mainWindow.loadFile("index.html");
 
@@ -56,12 +58,12 @@ const createMainWindow = (): any => {
     {
       label: "Edit",
       submenu: [
-        { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-        { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-        { type: "separator" },
-        { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-        { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-        { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+        {label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:"},
+        {label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:"},
+        {type: "separator"},
+        {label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:"},
+        {label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:"},
+        {label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:"},
         {
           label: "Select All",
           accelerator: "CmdOrCtrl+A",

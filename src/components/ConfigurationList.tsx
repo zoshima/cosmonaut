@@ -19,6 +19,8 @@ import LaunchIcon from '@material-ui/icons/Launch';
 import AddIcon from "@material-ui/icons/Add";
 import {Environment} from "../environment";
 import {Breakpoint} from "@material-ui/core/styles/createBreakpoints";
+import TitleBar from "./TitleBar";
+import ConfigurationForm from "./ConfigurationForm";
 
 const useStyles: any = makeStyles({
   gridList: {
@@ -42,6 +44,8 @@ const ConfigurationList: React.FC = (properties: any) => {
   const [configurations, setConfigurations] = useState(Environment.instance.configurations);
   const [menuAnchor, setMenuAnchor] = useState(null);
 
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean | Configuration>(false);
+
   useEffect(() => {
     console.log("useEffect", "Home");
   }, []);
@@ -63,17 +67,30 @@ const ConfigurationList: React.FC = (properties: any) => {
     return 1;
   };
 
-  const onMenuOpen = (event: React.MouseEvent, configuration: Configuration): void => {
+  const openDialog = (configuration?: Configuration = null): void => {
+    setIsDialogOpen(configuration || true);
+  };
+
+  const closeDialog = (shouldReload: boolean): void => {
+    setIsDialogOpen(false);
+
+    if (shouldReload) {
+      setConfigurations(Environment.instance.configurations);
+    }
+  };
+
+  const openMenu = (event: React.MouseEvent, configuration: Configuration): void => {
     console.log(event);
     setMenuAnchor({target: event.currentTarget, configuration: configuration});
   };
 
-  const onMenuClose = (): void => {
+  const closeMenu = (): void => {
     setMenuAnchor(null);
   };
 
   const editConfiguration = (configuration: Configuration): void => {
-    window.location.href = "#/configuration/" + configuration.id;
+    /* window.location.href = "#/configuration/" + configuration.id; */
+    openDialog(configuration);
     setMenuAnchor(null);
   };
 
@@ -96,6 +113,7 @@ const ConfigurationList: React.FC = (properties: any) => {
 
   return (
     <div>
+      <TitleBar showBack={false} />
       <GridList
         cellHeight={150}
         className={classes.gridList}
@@ -121,7 +139,7 @@ const ConfigurationList: React.FC = (properties: any) => {
                     <IconButton href={"#/app/" + configuration.id}>
                       <LaunchIcon style={{color: theme.palette.primary.main}} />
                     </IconButton>
-                    <IconButton onClick={(event: any) => onMenuOpen(event, configuration)}>
+                    <IconButton onClick={(event: any) => openMenu(event, configuration)}>
                       <MoreVertIcon style={{color: "white"}} />
                     </IconButton>
                   </div>
@@ -135,14 +153,16 @@ const ConfigurationList: React.FC = (properties: any) => {
       <Menu
         anchorEl={menuAnchor?.target}
         open={Boolean(menuAnchor?.target)}
-        onClose={onMenuClose}
+        onClose={closeMenu}
       >
         <MenuItem onClick={() => editConfiguration(menuAnchor.configuration)}>Edit</MenuItem>
         <MenuItem onClick={() => cloneConfiguration(menuAnchor.configuration)}>Clone</MenuItem>
         <MenuItem onClick={() => deleteConfiguration(menuAnchor.configuration)}>Delete</MenuItem>
       </Menu>
 
-      <Fab color="primary" href="#/configuration" className={classes.floatingButton}>
+      <ConfigurationForm isOpen={!!isDialogOpen} onClose={closeDialog} id={(isDialogOpen as Configuration).id} />
+
+      <Fab color="primary" className={classes.floatingButton} onClick={() => openDialog()}>
         <AddIcon />
       </Fab>
     </div>
