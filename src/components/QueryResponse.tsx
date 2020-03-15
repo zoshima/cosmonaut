@@ -2,7 +2,6 @@ import * as React from "react";
 import MonacoEditor from "react-monaco-editor";
 import * as monacoEditor from "monaco-editor/esm/vs/editor/editor.api";
 import * as electron from "electron";
-import {Environment} from "../environment";
 
 const QueryResponse: React.FC<{value: string}> = ({
   value
@@ -29,7 +28,9 @@ const QueryResponse: React.FC<{value: string}> = ({
     let timeout: NodeJS.Timeout;
 
     win.on("resize", () => {
-      clearTimeout(timeout);
+      if (timeout) {
+        clearTimeout(timeout);
+      }
 
       timeout = setTimeout(() => {
         align(editor);

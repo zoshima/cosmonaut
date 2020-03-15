@@ -47,7 +47,9 @@ const QueryEditor: React.FC<QueryEditorInput> = (input: QueryEditorInput) => {
     let timeout: NodeJS.Timeout;
 
     win.on("resize", () => {
-      clearTimeout(timeout);
+      if (timeout) {
+        clearTimeout(timeout);
+      }
 
       timeout = setTimeout(() => {
         align(editor);
