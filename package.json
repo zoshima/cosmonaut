@@ -1,7 +1,7 @@
 {
-  "name": "node-ts-template",
-  "version": "1.0.0",
-  "description": "",
+  "name": "cosmonaut",
+  "version": "0.1.0",
+  "description": "An explorer for Azure Cosmos databases with Gremlin API.",
   "main": "main.js",
   "scripts": {
     "build": "webpack",
@@ -10,7 +10,7 @@
     "start": "webpack && electron ./dist/main.js",
     "serve": "webpack --watch & electron ./dist/main.js"
   },
-  "author": "",
+  "author": "zoshima",
   "license": "ISC",
   "dependencies": {
     "@azure/cosmos": "^3.4.1",
