@@ -1,8 +1,8 @@
 # Cosmonaut
-Cosmonaut is an application for querying Cosmos databases using the Gremlin querying language.
+Cosmonaut is an Electron application for querying [Azure Cosmos](https://docs.microsoft.com/en-us/azure/cosmos-db/graph-introduction) databases using [Gremlin graph traversal language](http://tinkerpop.apache.org/docs/current/reference/).
 
 ## About
-Cosmos Emulator does not ship with any sort of client supporting the Gremlin querying language, and Azure portal only has a single line input for writing queries, while also being clunky to use when switching databases and collections. This application is intended as a remedy for these issues.
+[Azure Cosmos Emulator](https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator) does not ship with any sort of client for querying with Gremlin, and Azure Portal only has a single line input for queries, while also being clunky to use when switching databases and collections. Cosmonaut aims to work around these issues and make working with these databases faster and simpler.
 
 The application features connection profiles that allow for easy connecting to and switching between various databases, be they hosted in Azure or by Cosmos Emulator.
 
