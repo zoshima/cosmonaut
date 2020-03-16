@@ -24,7 +24,7 @@ const QueryEditor: React.FC<QueryEditorInput> = (input: QueryEditorInput) => {
     const winSize: number[] = win.getSize();
 
     editor.layout({
-      width: 500,
+      width: winSize[0] / 2,
       height: winSize[1] - 80 - 64
     });
   };

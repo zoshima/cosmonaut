@@ -11,7 +11,7 @@ const QueryResponse: React.FC<{value: string}> = ({
     const winSize: number[] = win.getSize();
 
     editor.layout({
-      width: winSize[0] - 500,
+      width: winSize[0] / 2,
       height: winSize[1] - 80 - 64
     });
   };
