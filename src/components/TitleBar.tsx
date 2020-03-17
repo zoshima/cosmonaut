@@ -16,6 +16,7 @@ const useStyles = makeStyles(theme => ({
     WebkitAppRegion: "drag"
   },
   appBar: {
+    color: theme.palette.secondary.contrastText,
     background: theme.palette.secondary.main,
     /* color: "white" */
   },
@@ -40,7 +41,7 @@ const TitleBar: React.FC<TitleBarInput> = (input: TitleBarInput) => {
   const classes = useStyles();
 
   return (
-    <AppBar id="app-bar" position="static" className={classes.appBar}>
+    <AppBar position="static" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
         {input.showBack &&
           <IconButton edge="start" className={classes.menuButton} color="inherit" onClick={() => window.location.href = "#/"}>

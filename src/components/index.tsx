@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {ThemeProvider, createMuiTheme, CssBaseline} from "@material-ui/core";
-import {teal, blueGrey, indigo, cyan} from "@material-ui/core/colors";
+import {grey, blueGrey} from "@material-ui/core/colors";
 import {HashRouter as Router, Route, Switch} from "react-router-dom";
 import ConfigurationList from "./ConfigurationList";
 import App from "./App";
@@ -10,10 +10,10 @@ const theme = createMuiTheme({
   palette: {
     type: "dark",
     primary: {
-      main: blueGrey[500]
+      main: grey[50]
     },
     secondary: {
-      main: blueGrey[500]
+      main: blueGrey[700]
     }
   },
   typography: {
