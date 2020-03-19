@@ -2,6 +2,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = [
   // ts (electron)
@@ -27,7 +28,7 @@ module.exports = [
   // tsx (react)
   {
     mode: "development",
-    entry: "./src/components/Index.tsx",
+    entry: "./src/index.tsx",
     target: "electron-renderer",
     module: {
       rules: [
@@ -51,7 +52,10 @@ module.exports = [
       filename: "index.js"
     },
     resolve: {
-      extensions: [".ts", ".tsx", ".js"]
+      extensions: [".ts", ".tsx", ".js"],
+      plugins: [
+        new TsconfigPathsPlugin({ configFile: "./tsconfig.json" })
+      ]
     },
     plugins: [
       new HtmlWebpackPlugin({

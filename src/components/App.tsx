@@ -1,18 +1,13 @@
 import * as React from "react";
-import Settings from "./Settings";
-import QueryEditor from "./QueryEditor";
-import QueryResponse from "./QueryResponse";
 import {makeStyles, Fab, createStyles, Theme} from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import {useEffect, useState, useCallback} from "react";
-import {GremlinClientFactory, GremlinClient} from "../cosmos/gremlin-client";
-import {CosmosDatabaseClient} from "../cosmos/cosmos-database-client";
-import {CosmosClient} from "../cosmos/cosmos-client";
 import prettier from "prettier";
-import {Configuration} from "../models/configuration.model";
 import {useParams} from "react-router-dom";
-import {Environment} from "../environment";
-import TitleBar from "./TitleBar";
+import {Environment} from "src/environment";
+import {CosmosClient, CosmosDatabaseClient, GremlinClient, GremlinClientFactory} from "src/cosmos";
+import {Configuration} from "src/models";
+import {Settings, QueryResponse, QueryEditor, TitleBar} from "src/components";
 
 const useStyles: any = makeStyles((theme: Theme) =>
   createStyles({

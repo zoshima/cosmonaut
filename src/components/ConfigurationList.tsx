@@ -11,17 +11,15 @@ import {
   MenuItem,
   Theme,
   createStyles,
-  ListSubheader
 } from "@material-ui/core";
 import React, {useEffect, useState} from "react";
-import {Configuration} from "../models/configuration.model";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import LaunchIcon from '@material-ui/icons/Launch';
 import AddIcon from "@material-ui/icons/Add";
-import {Environment} from "../environment";
 import {Breakpoint} from "@material-ui/core/styles/createBreakpoints";
-import TitleBar from "./TitleBar";
-import ConfigurationForm from "./ConfigurationForm";
+import {Environment} from "src/environment";
+import {Configuration} from "src/models";
+import {ConfigurationForm, TitleBar} from "src/components";
 
 const useStyles: any = makeStyles((theme: Theme) =>
   createStyles({

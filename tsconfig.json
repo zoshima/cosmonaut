@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "esModuleInterop": true,
     "outDir": "dist",
     "sourceMap": true,
@@ -8,5 +9,7 @@
     "target": "es6",
     "jsx": "react"
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*"
+  ]
 }

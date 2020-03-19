@@ -3,8 +3,7 @@ import * as ReactDOM from "react-dom";
 import {ThemeProvider, createMuiTheme, CssBaseline} from "@material-ui/core";
 import {grey, blueGrey} from "@material-ui/core/colors";
 import {HashRouter as Router, Route, Switch} from "react-router-dom";
-import ConfigurationList from "./ConfigurationList";
-import App from "./App";
+import {App, ConfigurationList} from "src/components";
 
 const theme = createMuiTheme({
   palette: {

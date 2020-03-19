@@ -1,6 +1,5 @@
 import * as fs from "fs";
-import {Configuration} from "./models/configuration.model";
-import * as electron from "electron";
+import {Configuration} from "src/models";
 
 export class Environment {
   private static path: string = "./dist/configs"; // TODO: why is path not relative to /dist?

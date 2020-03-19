@@ -9,8 +9,8 @@ import {
   Button,
 } from "@material-ui/core";
 import React, {useState, useEffect} from "react";
-import {Configuration} from "../models/configuration.model";
-import {Environment} from "../environment";
+import {Configuration} from "src/models";
+import {Environment} from "src/environment";
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
