@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 import {ThemeProvider, createMuiTheme, CssBaseline} from "@material-ui/core";
 import {grey, blueGrey} from "@material-ui/core/colors";
 import {HashRouter as Router, Route, Switch} from "react-router-dom";
-import {App, ConfigurationList} from "src/components";
+import {QueryPanel, ConfigurationList} from "src/components";
 
 const theme = createMuiTheme({
   palette: {
@@ -30,7 +30,7 @@ const Index = (): JSX.Element => {
       <Router>
         <Switch>
           <Route path="/app/:id">
-            <App />
+            <QueryPanel />
           </Route>
           <Route path="/">
             <ConfigurationList />

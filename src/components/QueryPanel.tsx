@@ -7,7 +7,7 @@ import {useParams} from "react-router-dom";
 import {Environment} from "src/environment";
 import {CosmosClient, CosmosDatabaseClient, GremlinClient, GremlinClientFactory} from "src/cosmos";
 import {Configuration} from "src/models";
-import {Settings, QueryResponse, QueryEditor, TitleBar} from "src/components";
+import {QueryPanelSettings, QueryResponse, QueryEditor, TitleBar} from "src/components";
 
 const useStyles: any = makeStyles((theme: Theme) =>
   ({
@@ -39,7 +39,7 @@ const prettify = (json: string): string => {
   return prettifiedJson;
 };
 
-const App: React.FC = () => {
+const QueryPanel: React.FC = () => {
   const params: {id?: string} = useParams();
   const defaultQueryValue: string = "g.V().limit(1)";
   const classes: any = useStyles();
@@ -179,7 +179,7 @@ const App: React.FC = () => {
       <TitleBar showBack={true} title={settings.title} />
 
       <div className={classes.top}>
-        <Settings
+        <QueryPanelSettings
           databaseIds={databaseIds}
           containerIds={containerIds}
           onDatabaseSelected={onDatabaseSelected}
@@ -212,4 +212,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default QueryPanel;

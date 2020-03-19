@@ -25,7 +25,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
   })
 );
 
-const Settings: React.FC<SettingsInput> = (input: SettingsInput) => {
+const QueryPanelSettings: React.FC<SettingsInput> = (input: SettingsInput) => {
   const classes: any = useStyles();
 
   const [databaseId, setDatabaseId] = useState("");
@@ -96,4 +96,4 @@ const Settings: React.FC<SettingsInput> = (input: SettingsInput) => {
   );
 };
 
-export default Settings;
+export default QueryPanelSettings;
