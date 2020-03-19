@@ -8,12 +8,15 @@ import App from "./App";
 
 const theme = createMuiTheme({
   palette: {
-    type: "dark",
+    type: "light",
+    background: {
+      default: blueGrey[200]
+    },
     primary: {
-      main: grey[50]
+      main: blueGrey[800]
     },
     secondary: {
-      main: blueGrey[700]
+      main: grey[500]
     }
   },
   typography: {

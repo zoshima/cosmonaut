@@ -16,8 +16,8 @@ const useStyles = makeStyles(theme => ({
     WebkitAppRegion: "drag"
   },
   appBar: {
-    color: theme.palette.secondary.contrastText,
-    background: theme.palette.secondary.main,
+    /* color: theme.palette.secondary.contrastText, */
+    /* background: theme.palette.secondary.main, */
     /* color: "white" */
   },
   closeButton: {
@@ -25,7 +25,8 @@ const useStyles = makeStyles(theme => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    WebkitAppRegion: "no-drag"
+    WebkitAppRegion: "no-drag",
+    color: theme.palette.secondary.contrastText
   },
   title: {
     flexGrow: 1,
@@ -44,7 +45,7 @@ const TitleBar: React.FC<TitleBarInput> = (input: TitleBarInput) => {
     <AppBar position="static" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
         {input.showBack &&
-          <IconButton edge="start" className={classes.menuButton} color="inherit" onClick={() => window.location.href = "#/"}>
+          <IconButton edge="start" className={classes.menuButton} onClick={() => window.location.href = "#/"}>
             <ArrowBackIcon />
           </IconButton>
         }
