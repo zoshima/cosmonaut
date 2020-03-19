@@ -13,12 +13,12 @@ import GremlinHightlightRules from "monaco-ace-tokenizer/lib/ace/definitions/gro
 
 import * as electron from "electron";
 
-interface QueryEditorInput {
+interface QueryEditorProperties {
   defaultValue: string;
   onChange: any;
 }
 
-const QueryEditor: React.FC<QueryEditorInput> = (input: QueryEditorInput) => {
+const QueryEditor: React.FC<QueryEditorProperties> = (properties: QueryEditorProperties) => {
   const align = (editor: monacoEditor.editor.IStandaloneCodeEditor): void => {
     const win: electron.BrowserWindow = electron.remote.getCurrentWindow();
     const winSize: number[] = win.getSize();
@@ -61,8 +61,8 @@ const QueryEditor: React.FC<QueryEditorInput> = (input: QueryEditorInput) => {
     <MonacoEditor
       language="groovy"
       theme="vs-dark"
-      defaultValue={input.defaultValue}
-      onChange={input.onChange}
+      defaultValue={properties.defaultValue}
+      onChange={properties.onChange}
       editorDidMount={editorDidMount}
       editorWillMount={editorWillMount}
       options={{minimap: {enabled: false}}}

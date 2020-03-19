@@ -28,15 +28,15 @@ const useStyles: any = makeStyles({
   },
 });
 
-interface ConfigurationFormInput {
+interface ConfigurationFormProperties {
   id?: string;
   isOpen: boolean;
   onClose: any; //function
 }
 
-const ConfigurationForm: React.FC<ConfigurationFormInput> = (input: ConfigurationFormInput) => {
+const ConfigurationForm: React.FC<ConfigurationFormProperties> = (properties: ConfigurationFormProperties) => {
   const classes: any = useStyles();
-  const id: string = input.id || Date.now() + "";
+  const id: string = properties.id || Date.now() + "";
 
   const configuration: Configuration =
     Environment.instance.configurations.find(
@@ -69,7 +69,7 @@ const ConfigurationForm: React.FC<ConfigurationFormInput> = (input: Configuratio
   const onClose = (): void => {
     setErrors({});
 
-    input.onClose();
+    properties.onClose();
   };
 
   const submitForm = (event: React.FormEvent<HTMLFormElement>): void => {
@@ -123,7 +123,7 @@ const ConfigurationForm: React.FC<ConfigurationFormInput> = (input: Configuratio
 
     Environment.instance.setConfiguration(_configuration);
 
-    input.onClose(true);
+    properties.onClose(true);
   };
 
   useEffect(() => {
@@ -131,10 +131,10 @@ const ConfigurationForm: React.FC<ConfigurationFormInput> = (input: Configuratio
   }, []);
 
   return (
-    <Dialog open={input.isOpen} onClose={onClose}>
+    <Dialog open={properties.isOpen} onClose={onClose}>
       <form className={classes.form} noValidate autoComplete="off" onSubmit={submitForm}>
         <DialogTitle>
-          {!!input.id
+          {!!properties.id
             ? <span>Edit configuration</span>
             : <span>New configuration</span>
           }

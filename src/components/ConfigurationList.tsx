@@ -9,7 +9,8 @@ import {
   Fab,
   Menu,
   MenuItem,
-  Theme
+  Theme,
+  WithWidthProps
 } from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -37,7 +38,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
   })
 );
 
-const ConfigurationList: React.FC = (properties: any) => {
+const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps) => {
   const classes: any = useStyles();
 
   const [configurations, setConfigurations] = useState(Environment.instance.configurations);

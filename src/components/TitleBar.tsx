@@ -33,24 +33,24 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-interface TitleBarInput {
+interface TitleBarProperties {
   showBack: boolean;
   title?: string;
 }
 
-const TitleBar: React.FC<TitleBarInput> = (input: TitleBarInput) => {
+const TitleBar: React.FC<TitleBarProperties> = (properties: TitleBarProperties) => {
   const classes = useStyles();
 
   return (
     <AppBar position="static" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
-        {input.showBack &&
+        {properties.showBack &&
           <IconButton edge="start" className={classes.menuButton} onClick={() => window.location.href = "#/"}>
             <ArrowBackIcon />
           </IconButton>
         }
         <Typography variant="h6" className={classes.title}>
-          {input.title || "Cosmonaut"}
+          {properties.title || "Cosmonaut"}
         </Typography>
         <IconButton className={classes.closeButton} onClick={() => window.close()}>
           <CloseIcon />
