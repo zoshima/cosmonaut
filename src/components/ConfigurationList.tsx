@@ -9,8 +9,7 @@ import {
   Fab,
   Menu,
   MenuItem,
-  Theme,
-  createStyles,
+  Theme
 } from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -22,7 +21,7 @@ import {Configuration} from "src/models";
 import {ConfigurationForm, TitleBar} from "src/components";
 
 const useStyles: any = makeStyles((theme: Theme) =>
-  createStyles({
+  ({
     gridList: {
       padding: theme.spacing(1)
     },

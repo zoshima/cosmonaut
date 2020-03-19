@@ -6,7 +6,6 @@ import {
   MenuItem,
   InputLabel,
   Toolbar,
-  createStyles,
   Theme
 } from "@material-ui/core";
 
@@ -18,7 +17,7 @@ interface SettingsInput {
 }
 
 const useStyles: any = makeStyles((theme: Theme) =>
-  createStyles({
+  ({
     formControl: {
       width: "200px",
       marginRight: theme.spacing(1)

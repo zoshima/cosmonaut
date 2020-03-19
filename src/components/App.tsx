@@ -1,5 +1,5 @@
 import * as React from "react";
-import {makeStyles, Fab, createStyles, Theme} from "@material-ui/core";
+import {makeStyles, Fab, Theme} from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import {useEffect, useState, useCallback} from "react";
 import prettier from "prettier";
@@ -10,7 +10,7 @@ import {Configuration} from "src/models";
 import {Settings, QueryResponse, QueryEditor, TitleBar} from "src/components";
 
 const useStyles: any = makeStyles((theme: Theme) =>
-  createStyles({
+  ({
     grid: {display: "flex", flexDirection: "column"},
     top: {
       display: "flex",
