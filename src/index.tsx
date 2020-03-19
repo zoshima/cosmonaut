@@ -1,27 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {ThemeProvider, createMuiTheme, CssBaseline} from "@material-ui/core";
-import {grey, blueGrey} from "@material-ui/core/colors";
+import {ThemeProvider, CssBaseline} from "@material-ui/core";
 import {HashRouter as Router, Route, Switch} from "react-router-dom";
 import {QueryPanel, ConfigurationList} from "src/components";
-
-const theme = createMuiTheme({
-  palette: {
-    type: "light",
-    background: {
-      default: blueGrey[200]
-    },
-    primary: {
-      main: blueGrey[800]
-    },
-    secondary: {
-      main: grey[500]
-    }
-  },
-  typography: {
-    fontFamily: "Roboto"
-  }
-});
+import {theme} from "src/themes/default";
 
 const Index = (): JSX.Element => {
   return (
