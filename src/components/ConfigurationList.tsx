@@ -10,7 +10,9 @@ import {
   Menu,
   MenuItem,
   Theme,
-  WithWidthProps
+  WithWidthProps,
+  Typography,
+  ListSubheader
 } from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -133,7 +135,62 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
         className={classes.gridList}
         cols={calculateColumns()}
       >
-        {configurations.map((configuration: Configuration) => {
+        <GridListTile key="Subheader" cols={calculateColumns()} style={{height: 'auto'}}>
+          <ListSubheader component="div">
+            <Typography variant="h6" gutterBottom>Local</Typography>
+          </ListSubheader>
+        </GridListTile>
+
+        {configurations.filter((c: Configuration) => !c.img.includes("azure")).map((configuration: Configuration) => {
+          return (
+            <GridListTile key={configuration.id} cols={1}>
+              <img
+                src={configuration.img}
+                alt={configuration.title}
+                className={classes.logo}
+              />
+              <GridListTileBar
+                title={configuration.title}
+                subtitle={configuration.description}
+                classes={{
+                  root: classes.titleBar,
+                  title: classes.title,
+                  subtitle: classes.subtitle
+                }}
+                actionIcon={
+                  <div>
+                    <IconButton
+                      href={"#/app/" + configuration.id}
+                      className={classes.subtitle}
+                    >
+                      <LaunchIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={(event: any) => openMenu(event, configuration)}
+                      className={classes.subtitle}
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                  </div>
+                }
+              />
+            </GridListTile>
+          );
+        })}
+      </GridList>
+
+      <GridList
+        cellHeight={150}
+        className={classes.gridList}
+        cols={calculateColumns()}
+      >
+        <GridListTile key="Subheader" cols={calculateColumns()} style={{height: 'auto'}}>
+          <ListSubheader component="div">
+            <Typography variant="h6" gutterBottom>Remote</Typography>
+          </ListSubheader>
+        </GridListTile>
+
+        {configurations.filter((c: Configuration) => c.img.includes("azure")).map((configuration: Configuration) => {
           return (
             <GridListTile key={configuration.id} cols={1}>
               <img
