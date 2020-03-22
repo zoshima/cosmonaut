@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, ChangeEvent, useEffect} from "react";
 import {
   makeStyles,
   FormControl,
@@ -28,19 +28,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
 const QueryPanelSettings: React.FC<QueryPanelSettingsProperties> = (properties: QueryPanelSettingsProperties) => {
   const classes: any = useStyles();
 
-  const [databaseId, setDatabaseId] = useState("");
   const [containerId, setContainerId] = useState("");
-
-  const onDatabaseIdChanged = async (
-    event: React.ChangeEvent<{value: string}>
-  ): Promise<void> => {
-    const selectedDatabaseId: string = event.target.value;
-
-    if (databaseId !== selectedDatabaseId) {
-      properties.onDatabaseSelected(selectedDatabaseId);
-      setDatabaseId(selectedDatabaseId);
-    }
-  };
 
   const onContainerIdChanged = async (
     event: React.ChangeEvent<{value: string}>
@@ -60,8 +48,8 @@ const QueryPanelSettings: React.FC<QueryPanelSettingsProperties> = (properties: 
         <Select
           labelId="database-input-label"
           id="database-select"
-          value={databaseId}
-          onChange={onDatabaseIdChanged}
+          value={properties.databaseIds[0] || ""}
+          onChange={(event: ChangeEvent<{value: string}>) => properties.onDatabaseSelected(event.target.value)}
           disabled={!(properties.databaseIds && properties.databaseIds.length)}
         >
           {properties.databaseIds.map((database: string) => {

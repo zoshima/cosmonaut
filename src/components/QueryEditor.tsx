@@ -34,7 +34,7 @@ const QueryEditor: React.FC<QueryEditorProperties> = (properties: QueryEditorPro
   return (
     <MonacoEditor
       language="groovy"
-      theme="vs-dark"
+      theme="gruvbox"
       defaultValue={properties.defaultValue}
       onChange={properties.onChange}
       editorDidMount={editorDidMount}
