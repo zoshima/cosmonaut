@@ -45,7 +45,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
       color: theme.palette.background.paper
     },
     title: {
-      color: theme.palette.primary.main
+      color: theme.palette.secondary.main
     },
     subtitle: {
       color: theme.palette.text.primary
@@ -95,7 +95,6 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
   };
 
   const openMenu = (event: React.MouseEvent, configuration: Configuration): void => {
-    console.log(event);
     setMenuAnchor({target: event.currentTarget, configuration: configuration});
   };
 
@@ -163,13 +162,13 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
                       href={"#/app/" + configuration.id}
                       className={classes.subtitle}
                     >
-                      <LaunchIcon />
+                      <LaunchIcon color="primary" />
                     </IconButton>
                     <IconButton
                       onClick={(event: any) => openMenu(event, configuration)}
                       className={classes.subtitle}
                     >
-                      <MoreVertIcon />
+                      <MoreVertIcon color="secondary" />
                     </IconButton>
                   </div>
                 }
@@ -212,13 +211,13 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
                       href={"#/app/" + configuration.id}
                       className={classes.subtitle}
                     >
-                      <LaunchIcon />
+                      <LaunchIcon color="primary" />
                     </IconButton>
                     <IconButton
                       onClick={(event: any) => openMenu(event, configuration)}
                       className={classes.subtitle}
                     >
-                      <MoreVertIcon />
+                      <MoreVertIcon color="secondary" />
                     </IconButton>
                   </div>
                 }
@@ -240,7 +239,7 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
 
       <ConfigurationForm isOpen={!!isDialogOpen} onClose={closeDialog} id={(isDialogOpen as Configuration).id} />
 
-      <Fab color="secondary" className={classes.floatingButton} onClick={() => openDialog()}>
+      <Fab color="primary" className={classes.floatingButton} onClick={() => openDialog()}>
         <AddIcon />
       </Fab>
     </div>
