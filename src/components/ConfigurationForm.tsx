@@ -7,6 +7,8 @@ import {
   InputLabel,
   Typography,
   Button,
+  Theme,
+  Divider,
 } from "@material-ui/core";
 import React, {useState, useEffect} from "react";
 import {Configuration} from "src/models";
@@ -17,16 +19,19 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-const useStyles: any = makeStyles({
+const useStyles: any = makeStyles((theme: Theme) => ({
   form: {
-    width: "500px"
+    width: "500px",
+    '& .MuiFormControl-root': {
+      margin: theme.spacing(1),
+      marginLeft: theme.spacing(2)
+    },
+    '& .MuiFormGroup-root': {
+      marginTop: theme.spacing(1),
+    },
   },
-  formSectionTitle: {
-    marginTop: "30px",
-    marginBottom: "15px",
-    fontSize: "1.2em"
-  },
-});
+})
+);
 
 interface ConfigurationFormProperties {
   id?: string;
@@ -168,15 +173,14 @@ const ConfigurationForm: React.FC<ConfigurationFormProperties> = (properties: Co
             />
           </FormGroup>
 
-          <Typography
-            className={classes.formSectionTitle}
-            color="textPrimary"
-            gutterBottom
-          >
-            Cosmos
-          </Typography>
-
           <FormGroup className={classes.formGroup}>
+            <Typography
+              variant="h6"
+              gutterBottom
+            >
+              Cosmos
+            </Typography>
+
             <FormControl>
               <InputLabel>Protocol</InputLabel>
               <Select
@@ -208,15 +212,15 @@ const ConfigurationForm: React.FC<ConfigurationFormProperties> = (properties: Co
             />
           </FormGroup>
 
-          <Typography
-            className={classes.formSectionTitle}
-            color="textPrimary"
-            gutterBottom
-          >
-            Gremlin
-          </Typography>
 
           <FormGroup className={classes.formGroup}>
+            <Typography
+              variant="h6"
+              gutterBottom
+            >
+              Gremlin
+            </Typography>
+
             <FormControl>
               <InputLabel>Protocol</InputLabel>
               <Select
