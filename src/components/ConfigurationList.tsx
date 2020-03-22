@@ -38,6 +38,15 @@ const useStyles: any = makeStyles((theme: Theme) =>
       position: "fixed",
       bottom: "30px",
       right: "30px"
+    },
+    titleBar: {
+      color: theme.palette.background.paper
+    },
+    title: {
+      color: theme.palette.primary.main
+    },
+    subtitle: {
+      color: theme.palette.text.primary
     }
   })
 );
@@ -137,14 +146,21 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
                 subtitle={configuration.description}
                 classes={{
                   root: classes.titleBar,
-                  title: classes.title
+                  title: classes.title,
+                  subtitle: classes.subtitle
                 }}
                 actionIcon={
                   <div>
-                    <IconButton href={"#/app/" + configuration.id}>
+                    <IconButton
+                      href={"#/app/" + configuration.id}
+                      className={classes.subtitle}
+                    >
                       <LaunchIcon />
                     </IconButton>
-                    <IconButton onClick={(event: any) => openMenu(event, configuration)}>
+                    <IconButton
+                      onClick={(event: any) => openMenu(event, configuration)}
+                      className={classes.subtitle}
+                    >
                       <MoreVertIcon />
                     </IconButton>
                   </div>
@@ -167,7 +183,7 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
 
       <ConfigurationForm isOpen={!!isDialogOpen} onClose={closeDialog} id={(isDialogOpen as Configuration).id} />
 
-      <Fab color="primary" className={classes.floatingButton} onClick={() => openDialog()}>
+      <Fab color="secondary" className={classes.floatingButton} onClick={() => openDialog()}>
         <AddIcon />
       </Fab>
     </div>

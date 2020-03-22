@@ -8,10 +8,10 @@ export const theme = createMuiTheme({
       paper: "#3c3836"
     },
     primary: {
-      main: "#fe8019"
+      main: "#fe9947"
     },
     secondary: {
-      main: "#8ec07c"
+      main: "#83a598"
     },
     error: {
       main: "#fb4934",
