@@ -14,7 +14,9 @@ const useStyles: any = makeStyles(theme => ({
     display: "flex",
     justifyContent: "center",
     background: theme.palette.background.paper,
-    cursor: "pointer"
+    cursor: "pointer",
+    borderTop: "1px solid",
+    borderTopColor: theme.palette.divider,
   }
 }));
 

@@ -14,16 +14,16 @@ export const theme = createMuiTheme({
       main: "#8ec07c"
     },
     error: {
-      main: "#cc241d",
+      main: "#fb4934",
     },
     warning: {
-      main: "#d79921"
+      main: "#fabd2f"
     },
     info: {
       main: "#458588"
     },
     success: {
-      main: "#98971a"
+      main: "#b8bb26"
     },
     text: {
       primary: "#fbf1c7",

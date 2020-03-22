@@ -9,7 +9,7 @@ import {useParams} from "react-router-dom";
 import {Environment} from "src/environment";
 import {CosmosClient, CosmosDatabaseClient, GremlinClient, GremlinClientFactory} from "src/cosmos";
 import {Configuration} from "src/models";
-import {QueryPanelSettings, QueryResponse, QueryEditor, TitleBar, AccordionDivider} from "src/components";
+import {QueryPanelSettings, QueryResponse, QueryEditor, TitleBar, AccordionDivider, QueryPanelStatusBar} from "src/components";
 
 const useStyles: any = makeStyles((theme: Theme) =>
   ({
@@ -69,13 +69,14 @@ const QueryPanel: React.FC = () => {
 
   const [databaseIds, setDatabaseIds] = useState([]);
   const [containerIds, setContainerIds] = useState([]);
-  const [, setDatabaseClient] = useState(null);
+  const [databaseClient, setDatabaseClient] = useState(null);
   const [gremlinClientFactory, setGremlinClientFactory] = useState(null);
   const [gremlinClient, setGremlinClient] = useState(null);
   const [queryText, setQueryText] = useState(null);
   const [queryResult, setQueryResult] = useState(null);
   const [errorText, setErrorText] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [statusText, setStatusText] = useState(null);
 
   const onError = useCallback((err: any): void => {
     console.error(err);
@@ -85,6 +86,8 @@ const QueryPanel: React.FC = () => {
     } else {
       setErrorText(prettify(JSON.stringify(err)));
     }
+
+    setIsDrawerOpen(true);
   }, []);
 
   useEffect(() => {
@@ -95,6 +98,8 @@ const QueryPanel: React.FC = () => {
       settings.cosmos.port,
       settings.key
     );
+
+    setStatusText("retrieving databases");
 
     cosmosClient
       .getDatabases()
@@ -107,6 +112,8 @@ const QueryPanel: React.FC = () => {
       })
       .catch(err => {
         onError(err);
+      }).finally(() => {
+        setStatusText(null);
       });
 
     setQueryText(defaultQueryValue);
@@ -114,6 +121,8 @@ const QueryPanel: React.FC = () => {
 
   const onDatabaseSelected = async (databaseId: string): Promise<void> => {
     try {
+      setStatusText(`connecting to '${databaseId}'`);
+
       if (gremlinClientFactory) {
         await gremlinClientFactory.destroy();
       }
@@ -147,10 +156,14 @@ const QueryPanel: React.FC = () => {
       setGremlinClientFactory(null);
       setGremlinClient(null);
       setContainerIds(null);
+    } finally {
+      setStatusText(null);
     }
   };
 
   const onContainerSelected = async (containerId: string): Promise<void> => {
+    setStatusText(`connecting to '${containerId}'`);
+
     if (gremlinClient && gremlinClient.isOpen) {
       await gremlinClient.close();
     }
@@ -166,13 +179,17 @@ const QueryPanel: React.FC = () => {
       onError(err);
 
       setGremlinClient(null);
+    } finally {
+      setStatusText(null);
     }
   };
 
   const onExecute = async (): Promise<void> => {
-    let responseJson: any;
-
+    setStatusText("querying");
+    setErrorText(null);
     setQueryResult(null);
+
+    let responseJson: any;
 
     try {
       if (!gremlinClient.isOpen) {
@@ -192,12 +209,13 @@ const QueryPanel: React.FC = () => {
       onError(err);
     } finally {
       setIsDrawerOpen(true);
+      setStatusText(null);
     }
   };
 
   return (
     <div className={classes.grid}>
-      <TitleBar showBack={true} title={settings.title} />
+      <TitleBar showBack={true} />
 
       <div className={classes.top}>
         <div className={classes.topLeft}>
@@ -248,6 +266,15 @@ const QueryPanel: React.FC = () => {
           />
         </div>
       </Drawer>
+
+      <QueryPanelStatusBar
+        profileName={settings.title}
+        databaseName={databaseClient?.id}
+        containerName={gremlinClient?.containerId}
+        statusMessage={statusText}
+        errorMessage={errorText}
+        isConnected={gremlinClient?.isOpen}
+      />
     </div>
   );
 };
