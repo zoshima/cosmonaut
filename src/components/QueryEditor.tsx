@@ -24,7 +24,7 @@ const QueryEditor: React.FC<QueryEditorProperties> = (properties: QueryEditorPro
     const winSize: number[] = win.getSize();
 
     editor.layout({
-      width: winSize[0] / 2,
+      width: winSize[0],
       height: winSize[1] - 80 - 64
     });
   };
@@ -41,20 +41,20 @@ const QueryEditor: React.FC<QueryEditorProperties> = (properties: QueryEditorPro
     editor: monacoEditor.editor.IStandaloneCodeEditor
   ): void => {
     editor.focus();
-    align(editor);
+    /* align(editor); */
 
-    const win: electron.BrowserWindow = electron.remote.getCurrentWindow();
-    let timeout: NodeJS.Timeout;
+    /* const win: electron.BrowserWindow = electron.remote.getCurrentWindow(); */
+    /* let timeout: NodeJS.Timeout; */
 
-    win.on("resize", () => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
+    /* win.on("resize", () => { */
+    /*   if (timeout) { */
+    /*     clearTimeout(timeout); */
+    /*   } */
 
-      timeout = setTimeout(() => {
-        align(editor);
-      }, 500);
-    });
+    /*   timeout = setTimeout(() => { */
+    /*     align(editor); */
+    /*   }, 500); */
+    /* }); */
   };
 
   return (
@@ -65,7 +65,7 @@ const QueryEditor: React.FC<QueryEditorProperties> = (properties: QueryEditorPro
       onChange={properties.onChange}
       editorDidMount={editorDidMount}
       editorWillMount={editorWillMount}
-      options={{minimap: {enabled: false}}}
+      options={{minimap: {enabled: false}, automaticLayout: true}}
     />
   );
 };

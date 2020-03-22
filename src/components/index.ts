@@ -5,3 +5,4 @@ export {default as QueryEditor} from "./QueryEditor";
 export {default as QueryResponse} from "./QueryResponse";
 export {default as QueryPanelSettings} from "./QueryPanelSettings";
 export {default as TitleBar} from "./TitleBar";
+export {default as AccordionDivider} from "./AccordionDivider";

@@ -24,7 +24,11 @@ import {ConfigurationForm, TitleBar} from "src/components";
 const useStyles: any = makeStyles((theme: Theme) =>
   ({
     gridList: {
-      padding: theme.spacing(1)
+      padding: theme.spacing(1),
+      margin: theme.spacing(0),
+      flexGrow: 0,
+      maxWidth: `100%`,
+      flexBasis: `100%`
     },
     logo: {
       width: "100%",
@@ -114,6 +118,7 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
   return (
     <div>
       <TitleBar showBack={false} />
+
       <GridList
         cellHeight={150}
         className={classes.gridList}

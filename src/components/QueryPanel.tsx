@@ -1,23 +1,41 @@
 import * as React from "react";
-import {makeStyles, Fab, Theme} from "@material-ui/core";
+import {makeStyles, Fab, Theme, Drawer, Button, Divider} from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
+
+
 import {useEffect, useState, useCallback} from "react";
 import prettier from "prettier";
 import {useParams} from "react-router-dom";
 import {Environment} from "src/environment";
 import {CosmosClient, CosmosDatabaseClient, GremlinClient, GremlinClientFactory} from "src/cosmos";
 import {Configuration} from "src/models";
-import {QueryPanelSettings, QueryResponse, QueryEditor, TitleBar} from "src/components";
+import {QueryPanelSettings, QueryResponse, QueryEditor, TitleBar, AccordionDivider} from "src/components";
 
 const useStyles: any = makeStyles((theme: Theme) =>
   ({
-    grid: {display: "flex", flexDirection: "column"},
+    grid: {display: "flex", flexDirection: "column", height: "100vh"},
     top: {
       display: "flex",
-      padding: theme.spacing(1),
-      diplay: "flex",
+      justifyContent: "space-between",
+      borderBottom: "1px solid",
+      borderBottomColor: theme.palette.divider
     },
-    bottom: {flex: 1, display: "flex"},
+    topLeft: {
+    },
+    topRight: {
+      display: "flex",
+      alignItems: "center"
+    },
+    actionsContainer: {
+      paddingRight: theme.spacing(3),
+      paddingLeft: theme.spacing(2)
+    },
+    drawer: {
+      width: "100vw",
+      height: "50vh",
+      overflow: "hidden"
+    },
+    bottom: {flex: 1, overflow: "hidden"},
     editorContainer: {},
     resultContainer: {},
     submitContainer: {},
@@ -57,6 +75,7 @@ const QueryPanel: React.FC = () => {
   const [queryText, setQueryText] = useState(null);
   const [queryResult, setQueryResult] = useState(null);
   const [errorText, setErrorText] = useState(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const onError = useCallback((err: any): void => {
     console.error(err);
@@ -171,6 +190,8 @@ const QueryPanel: React.FC = () => {
       setQueryResult(prettify(responseString));
     } catch (err) {
       onError(err);
+    } finally {
+      setIsDrawerOpen(true);
     }
   };
 
@@ -179,35 +200,52 @@ const QueryPanel: React.FC = () => {
       <TitleBar showBack={true} title={settings.title} />
 
       <div className={classes.top}>
-        <QueryPanelSettings
-          databaseIds={databaseIds}
-          containerIds={containerIds}
-          onDatabaseSelected={onDatabaseSelected}
-          onContainerSelected={onContainerSelected}
-        />
+        <div className={classes.topLeft}>
+          <QueryPanelSettings
+            databaseIds={databaseIds}
+            containerIds={containerIds}
+            onDatabaseSelected={onDatabaseSelected}
+            onContainerSelected={onContainerSelected}
+          />
+        </div>
+
+        <div className={classes.topRight}>
+          <Divider orientation="vertical" flexItem />
+          <div className={classes.actionsContainer}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={onExecute}
+              disabled={!(gremlinClient && queryText)}
+            >Execute</Button>
+          </div>
+        </div>
       </div>
 
       <div className={classes.bottom} id="bottomContainer">
-        <div className={classes.editorContainer} id="queryContainer">
-          <QueryEditor
-            defaultValue={defaultQueryValue}
-            onChange={onQueryChange}
-          />
+        <QueryEditor
+          defaultValue={defaultQueryValue}
+          onChange={onQueryChange}
+        />
+      </div>
 
-          <Fab color="primary"
-            onClick={onExecute}
-            disabled={!(gremlinClient && queryText)}
-            className={classes.floatingButton}>
-            <SendIcon />
-          </Fab>
-        </div>
+      <div>
+        <AccordionDivider direction="up" onClick={() => setIsDrawerOpen(true)} />
+      </div>
 
-        <div className={classes.resultContainer} id="resultContainer">
+      <Drawer
+        variant="persistent"
+        anchor="bottom"
+        open={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+      >
+        <div className={classes.drawer}>
+          <AccordionDivider direction="down" onClick={() => setIsDrawerOpen(false)} />
           <QueryResponse
             value={queryResult || errorText}
           />
         </div>
-      </div>
+      </Drawer>
     </div>
   );
 };

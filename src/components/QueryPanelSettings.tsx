@@ -55,7 +55,7 @@ const QueryPanelSettings: React.FC<QueryPanelSettingsProperties> = (properties: 
 
   return (
     <Toolbar id="tool-bar" className={classes.toolbar}>
-      <FormControl className={classes.formControl} variant="filled">
+      <FormControl className={classes.formControl} variant="filled" size="small">
         <InputLabel id="database-input-label">Database</InputLabel>
         <Select
           labelId="database-input-label"
@@ -74,7 +74,7 @@ const QueryPanelSettings: React.FC<QueryPanelSettingsProperties> = (properties: 
         </Select>
       </FormControl>
 
-      <FormControl className={classes.formControl} variant="filled">
+      <FormControl className={classes.formControl} variant="filled" size="small">
         <InputLabel id="container-input-label">Container</InputLabel>
         <Select
           labelId="container-input-label"

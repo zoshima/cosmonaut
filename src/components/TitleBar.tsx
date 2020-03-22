@@ -16,9 +16,8 @@ const useStyles = makeStyles(theme => ({
     WebkitAppRegion: "drag"
   },
   appBar: {
-    /* color: theme.palette.secondary.contrastText, */
-    /* background: theme.palette.secondary.main, */
-    /* color: "white" */
+    color: theme.palette.text.primary,
+    background: theme.palette.background.paper,
   },
   closeButton: {
     WebkitAppRegion: "no-drag"
@@ -26,7 +25,6 @@ const useStyles = makeStyles(theme => ({
   menuButton: {
     marginRight: theme.spacing(2),
     WebkitAppRegion: "no-drag",
-    color: theme.palette.secondary.contrastText
   },
   title: {
     flexGrow: 1,

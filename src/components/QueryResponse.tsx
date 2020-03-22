@@ -22,20 +22,20 @@ const QueryResponse: React.FC<{value: string}> = ({
     /* editor.onDidChangeModelContent(() => { */
     /*   editor.setPosition({ lineNumber: 0, column: 0 }); */
     /* }); */
-    align(editor);
+    /* align(editor); */
 
-    const win: electron.BrowserWindow = electron.remote.getCurrentWindow();
-    let timeout: NodeJS.Timeout;
+    /* const win: electron.BrowserWindow = electron.remote.getCurrentWindow(); */
+    /* let timeout: NodeJS.Timeout; */
 
-    win.on("resize", () => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
+    /* win.on("resize", () => { */
+    /*   if (timeout) { */
+    /*     clearTimeout(timeout); */
+    /*   } */
 
-      timeout = setTimeout(() => {
-        align(editor);
-      }, 500);
-    });
+    /*   timeout = setTimeout(() => { */
+    /*     align(editor); */
+    /*   }, 500); */
+    /* }); */
   };
 
   return (
@@ -43,7 +43,7 @@ const QueryResponse: React.FC<{value: string}> = ({
       language="json"
       theme="vs-dark"
       value={value}
-      options={{readOnly: true, minimap: {enabled: false}}}
+      options={{readOnly: true, minimap: {enabled: false}, automaticLayout: true}}
       editorDidMount={editorDidMount}
     />
   );
