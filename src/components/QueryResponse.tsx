@@ -1,41 +1,23 @@
 import * as React from "react";
 import MonacoEditor from "react-monaco-editor";
 import * as monacoEditor from "monaco-editor/esm/vs/editor/editor.api";
-import * as electron from "electron";
 
 const QueryResponse: React.FC<{value: string}> = ({
   value
 }) => {
-  const align = (editor: monacoEditor.editor.IStandaloneCodeEditor): void => {
-    const win: electron.BrowserWindow = electron.remote.getCurrentWindow();
-    const winSize: number[] = win.getSize();
-
-    editor.layout({
-      width: winSize[0] / 2,
-      height: winSize[1] - 80 - 64
-    });
-  };
+  let previousValue: string;
 
   const editorDidMount = (
     editor: monacoEditor.editor.IStandaloneCodeEditor
   ) => {
-    /* editor.onDidChangeModelContent(() => { */
-    /*   editor.setPosition({ lineNumber: 0, column: 0 }); */
-    /* }); */
-    /* align(editor); */
+    editor.onDidChangeModelContent((e: monacoEditor.editor.IModelContentChangedEvent) => {
+      const newValue: string = e.changes[0].text;
 
-    /* const win: electron.BrowserWindow = electron.remote.getCurrentWindow(); */
-    /* let timeout: NodeJS.Timeout; */
-
-    /* win.on("resize", () => { */
-    /*   if (timeout) { */
-    /*     clearTimeout(timeout); */
-    /*   } */
-
-    /*   timeout = setTimeout(() => { */
-    /*     align(editor); */
-    /*   }, 500); */
-    /* }); */
+      if (previousValue != newValue) {
+        previousValue = newValue;
+        editor.setPosition({lineNumber: 0, column: 0});
+      }
+    });
   };
 
   return (

@@ -165,10 +165,6 @@ const QueryPanel: React.FC = () => {
     }
   };
 
-  const onQueryChange = (query: string): void => {
-    setQueryText(query);
-  };
-
   const onExecute = async (): Promise<void> => {
     let responseJson: any;
 
@@ -225,7 +221,7 @@ const QueryPanel: React.FC = () => {
       <div className={classes.bottom} id="bottomContainer">
         <QueryEditor
           defaultValue={defaultQueryValue}
-          onChange={onQueryChange}
+          onChange={(val: string) => {setQueryText(val)}}
         />
       </div>
 

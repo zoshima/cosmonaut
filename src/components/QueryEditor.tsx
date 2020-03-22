@@ -11,24 +11,12 @@ import {registerRulesForLanguage} from "monaco-ace-tokenizer";
 //@ts-ignore
 import GremlinHightlightRules from "monaco-ace-tokenizer/lib/ace/definitions/groovy";
 
-import * as electron from "electron";
-
 interface QueryEditorProperties {
   defaultValue: string;
   onChange: any;
 }
 
 const QueryEditor: React.FC<QueryEditorProperties> = (properties: QueryEditorProperties) => {
-  const align = (editor: monacoEditor.editor.IStandaloneCodeEditor): void => {
-    const win: electron.BrowserWindow = electron.remote.getCurrentWindow();
-    const winSize: number[] = win.getSize();
-
-    editor.layout({
-      width: winSize[0],
-      height: winSize[1] - 80 - 64
-    });
-  };
-
   const editorWillMount = (monaco: typeof monacoEditor): void => {
     monaco.languages.register({
       id: "groovy"
@@ -41,20 +29,6 @@ const QueryEditor: React.FC<QueryEditorProperties> = (properties: QueryEditorPro
     editor: monacoEditor.editor.IStandaloneCodeEditor
   ): void => {
     editor.focus();
-    /* align(editor); */
-
-    /* const win: electron.BrowserWindow = electron.remote.getCurrentWindow(); */
-    /* let timeout: NodeJS.Timeout; */
-
-    /* win.on("resize", () => { */
-    /*   if (timeout) { */
-    /*     clearTimeout(timeout); */
-    /*   } */
-
-    /*   timeout = setTimeout(() => { */
-    /*     align(editor); */
-    /*   }, 500); */
-    /* }); */
   };
 
   return (
