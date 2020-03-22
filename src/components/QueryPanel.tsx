@@ -229,9 +229,11 @@ const QueryPanel: React.FC = () => {
         />
       </div>
 
-      <div>
-        <AccordionDivider direction="up" onClick={() => setIsDrawerOpen(true)} />
-      </div>
+      {(queryResult || errorText) &&
+        <div>
+          <AccordionDivider direction="up" onClick={() => setIsDrawerOpen(true)} />
+        </div>
+      }
 
       <Drawer
         variant="persistent"
