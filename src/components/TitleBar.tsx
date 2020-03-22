@@ -43,14 +43,14 @@ const TitleBar: React.FC<TitleBarProperties> = (properties: TitleBarProperties) 
     <AppBar position="static" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
         {properties.showBack &&
-          <IconButton edge="start" className={classes.menuButton} onClick={() => window.location.href = "#/"}>
+          <IconButton edge="start" color="inherit" className={classes.menuButton} onClick={() => window.location.href = "#/"}>
             <ArrowBackIcon />
           </IconButton>
         }
         <Typography variant="h6" className={classes.title}>
           {properties.title || "Cosmonaut"}
         </Typography>
-        <IconButton className={classes.closeButton} onClick={() => window.close()}>
+        <IconButton color="inherit" className={classes.closeButton} onClick={() => window.close()}>
           <CloseIcon />
         </IconButton>
       </Toolbar>
