@@ -137,15 +137,15 @@ const ConfigurationForm: React.FC<ConfigurationFormProperties> = (properties: Co
 
   return (
     <Dialog open={properties.isOpen} onClose={onClose}>
-      <form className={classes.form} noValidate autoComplete="off" onSubmit={submitForm}>
-        <DialogTitle>
-          {!!properties.id
-            ? <span>Edit configuration</span>
-            : <span>New configuration</span>
-          }
-        </DialogTitle>
+      <DialogTitle>
+        {!!properties.id
+          ? <span>Edit configuration</span>
+          : <span>New configuration</span>
+        }
+      </DialogTitle>
 
-        <DialogContent>
+      <DialogContent>
+        <form className={classes.form} noValidate autoComplete="off" onSubmit={submitForm} id="form">
           <FormGroup className={classes.formGroup}>
             <TextField
               required
@@ -251,15 +251,15 @@ const ConfigurationForm: React.FC<ConfigurationFormProperties> = (properties: Co
               defaultValue={configuration.gremlin.port}
             />
           </FormGroup>
-        </DialogContent>
+        </form>
+      </DialogContent>
 
-        <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
-          <Button type="submit" variant="contained" color="primary" disabled={!!Object.keys(errors).length}>
-            Submit
-          </Button>
-        </DialogActions>
-      </form>
+      <DialogActions>
+        <Button onClick={onClose}>Cancel</Button>
+        <Button type="submit" form="form" variant="contained" color="primary" disabled={!!Object.keys(errors).length}>
+          Submit
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
