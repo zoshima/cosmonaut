@@ -45,7 +45,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
       color: theme.palette.background.paper
     },
     title: {
-      color: theme.palette.secondary.main
+      color: theme.palette.primary.main
     },
     subtitle: {
       color: theme.palette.text.primary
@@ -211,7 +211,7 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
                       href={"#/app/" + configuration.id}
                       className={classes.subtitle}
                     >
-                      <LaunchIcon color="primary" />
+                      <LaunchIcon color="secondary" />
                     </IconButton>
                     <IconButton
                       onClick={(event: any) => openMenu(event, configuration)}
