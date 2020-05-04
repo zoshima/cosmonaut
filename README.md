@@ -6,12 +6,12 @@ Cosmonaut is an Electron application for querying [Azure Cosmos](https://docs.mi
 
 The application features connection profiles that allow for easy connecting to and switching between various databases, be they hosted in Azure or by Cosmos Emulator.
 
-![Profile listing](screenshots/profile-list.png) 
-![Profile form](screenshots/profile-form.png)
+![Profile listing](screenshots/profile-list-2.png) 
+![Profile form](screenshots/profile-form-2.png)
 
 When connected to a profile, queries are written in Monaco Editor, and output is shown as formatted JSON.
 
-![Profile form](screenshots/app-view.png)
+![Profile form](screenshots/app-view-2.png)
 
 ## Installation
 
