@@ -12,54 +12,58 @@ import {
   Theme,
   WithWidthProps,
   Typography,
-  ListSubheader
+  ListSubheader,
 } from "@material-ui/core";
-import React, {useEffect, useState} from "react";
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import LaunchIcon from '@material-ui/icons/Launch';
+import React, { useEffect, useState } from "react";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import LaunchIcon from "@material-ui/icons/Launch";
 import AddIcon from "@material-ui/icons/Add";
-import {Breakpoint} from "@material-ui/core/styles/createBreakpoints";
-import {Environment} from "src/environment";
-import {Configuration} from "src/models";
-import {ConfigurationForm, TitleBar} from "src/components";
+import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
+import { Environment } from "src/environment";
+import { Configuration } from "src/models";
+import { ConfigurationForm, TitleBar } from "src/components";
 
-const useStyles: any = makeStyles((theme: Theme) =>
-  ({
-    gridList: {
-      padding: theme.spacing(1),
-      margin: theme.spacing(0),
-      flexGrow: 0,
-      maxWidth: `100%`,
-      flexBasis: `100%`
-    },
-    logo: {
-      width: "100%",
-      height: "100%"
-    },
-    floatingButton: {
-      position: "fixed",
-      bottom: "30px",
-      right: "30px"
-    },
-    titleBar: {
-      color: theme.palette.background.paper
-    },
-    title: {
-      color: theme.palette.primary.main
-    },
-    subtitle: {
-      color: theme.palette.text.primary
-    }
-  })
-);
+const useStyles: any = makeStyles((theme: Theme) => ({
+  gridList: {
+    padding: theme.spacing(1),
+    margin: theme.spacing(0),
+    flexGrow: 0,
+    maxWidth: `100%`,
+    flexBasis: `100%`,
+  },
+  logo: {
+    width: "100%",
+    height: "100%",
+  },
+  floatingButton: {
+    position: "fixed",
+    bottom: "30px",
+    right: "30px",
+  },
+  titleBar: {
+    color: theme.palette.background.paper,
+  },
+  title: {
+    color: theme.palette.primary.main,
+  },
+  subtitle: {
+    color: theme.palette.text.primary,
+  },
+}));
 
-const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps) => {
+const ConfigurationList: React.FC<WithWidthProps> = (
+  properties: WithWidthProps
+) => {
   const classes: any = useStyles();
 
-  const [configurations, setConfigurations] = useState(Environment.instance.configurations);
+  const [configurations, setConfigurations] = useState(
+    Environment.instance.configurations
+  );
   const [menuAnchor, setMenuAnchor] = useState(null);
 
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean | Configuration>(false);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean | Configuration>(
+    false
+  );
 
   useEffect(() => {
     console.log("useEffect", "Home");
@@ -70,7 +74,7 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
       xl: 6,
       lg: 4,
       md: 3,
-      sm: 2
+      sm: 2,
     };
 
     for (const breakpoint in breakpointMap) {
@@ -94,8 +98,14 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
     }
   };
 
-  const openMenu = (event: React.MouseEvent, configuration: Configuration): void => {
-    setMenuAnchor({target: event.currentTarget, configuration: configuration});
+  const openMenu = (
+    event: React.MouseEvent,
+    configuration: Configuration
+  ): void => {
+    setMenuAnchor({
+      target: event.currentTarget,
+      configuration: configuration,
+    });
   };
 
   const closeMenu = (): void => {
@@ -109,7 +119,11 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
   };
 
   const deleteConfiguration = (configuration: Configuration): void => {
-    if (window.confirm(`Are you sure you wish to delete '${configuration.title}'?`)) {
+    if (
+      window.confirm(
+        `Are you sure you wish to delete '${configuration.title}'?`
+      )
+    ) {
       Environment.instance.deleteConfiguration(configuration);
     }
 
@@ -118,7 +132,10 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
   };
 
   const cloneConfiguration = (configuration: Configuration): void => {
-    const _configuration: Configuration = {...configuration, id: Date.now() + ""};
+    const _configuration: Configuration = {
+      ...configuration,
+      id: Date.now() + "",
+    };
     Environment.instance.setConfiguration(_configuration);
 
     setMenuAnchor(null);
@@ -134,48 +151,56 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
         className={classes.gridList}
         cols={calculateColumns()}
       >
-        <GridListTile key="Subheader" cols={calculateColumns()} style={{height: 'auto'}}>
+        <GridListTile
+          key="Subheader"
+          cols={calculateColumns()}
+          style={{ height: "auto" }}
+        >
           <ListSubheader component="div">
-            <Typography variant="h6" gutterBottom>Local</Typography>
+            <Typography variant="h6" gutterBottom>
+              Local
+            </Typography>
           </ListSubheader>
         </GridListTile>
 
-        {configurations.filter((c: Configuration) => !c.img.includes("azure")).map((configuration: Configuration) => {
-          return (
-            <GridListTile key={configuration.id} cols={1}>
-              <img
-                src={configuration.img}
-                alt={configuration.title}
-                className={classes.logo}
-              />
-              <GridListTileBar
-                title={configuration.title}
-                subtitle={configuration.description}
-                classes={{
-                  root: classes.titleBar,
-                  title: classes.title,
-                  subtitle: classes.subtitle
-                }}
-                actionIcon={
-                  <div>
-                    <IconButton
-                      href={"#/app/" + configuration.id}
-                      className={classes.subtitle}
-                    >
-                      <LaunchIcon color="primary" />
-                    </IconButton>
-                    <IconButton
-                      onClick={(event: any) => openMenu(event, configuration)}
-                      className={classes.subtitle}
-                    >
-                      <MoreVertIcon color="secondary" />
-                    </IconButton>
-                  </div>
-                }
-              />
-            </GridListTile>
-          );
-        })}
+        {configurations
+          .filter((c: Configuration) => !c.img.includes("azure"))
+          .map((configuration: Configuration) => {
+            return (
+              <GridListTile key={configuration.id} cols={1}>
+                <img
+                  src={configuration.img}
+                  alt={configuration.title}
+                  className={classes.logo}
+                />
+                <GridListTileBar
+                  title={configuration.title}
+                  subtitle={configuration.description}
+                  classes={{
+                    root: classes.titleBar,
+                    title: classes.title,
+                    subtitle: classes.subtitle,
+                  }}
+                  actionIcon={
+                    <div>
+                      <IconButton
+                        href={"#/app/" + configuration.id}
+                        className={classes.subtitle}
+                      >
+                        <LaunchIcon color="primary" />
+                      </IconButton>
+                      <IconButton
+                        onClick={(event: any) => openMenu(event, configuration)}
+                        className={classes.subtitle}
+                      >
+                        <MoreVertIcon color="secondary" />
+                      </IconButton>
+                    </div>
+                  }
+                />
+              </GridListTile>
+            );
+          })}
       </GridList>
 
       <GridList
@@ -183,48 +208,56 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
         className={classes.gridList}
         cols={calculateColumns()}
       >
-        <GridListTile key="Subheader" cols={calculateColumns()} style={{height: 'auto'}}>
+        <GridListTile
+          key="Subheader"
+          cols={calculateColumns()}
+          style={{ height: "auto" }}
+        >
           <ListSubheader component="div">
-            <Typography variant="h6" gutterBottom>Remote</Typography>
+            <Typography variant="h6" gutterBottom>
+              Remote
+            </Typography>
           </ListSubheader>
         </GridListTile>
 
-        {configurations.filter((c: Configuration) => c.img.includes("azure")).map((configuration: Configuration) => {
-          return (
-            <GridListTile key={configuration.id} cols={1}>
-              <img
-                src={configuration.img}
-                alt={configuration.title}
-                className={classes.logo}
-              />
-              <GridListTileBar
-                title={configuration.title}
-                subtitle={configuration.description}
-                classes={{
-                  root: classes.titleBar,
-                  title: classes.title,
-                  subtitle: classes.subtitle
-                }}
-                actionIcon={
-                  <div>
-                    <IconButton
-                      href={"#/app/" + configuration.id}
-                      className={classes.subtitle}
-                    >
-                      <LaunchIcon color="secondary" />
-                    </IconButton>
-                    <IconButton
-                      onClick={(event: any) => openMenu(event, configuration)}
-                      className={classes.subtitle}
-                    >
-                      <MoreVertIcon color="secondary" />
-                    </IconButton>
-                  </div>
-                }
-              />
-            </GridListTile>
-          );
-        })}
+        {configurations
+          .filter((c: Configuration) => c.img.includes("azure"))
+          .map((configuration: Configuration) => {
+            return (
+              <GridListTile key={configuration.id} cols={1}>
+                <img
+                  src={configuration.img}
+                  alt={configuration.title}
+                  className={classes.logo}
+                />
+                <GridListTileBar
+                  title={configuration.title}
+                  subtitle={configuration.description}
+                  classes={{
+                    root: classes.titleBar,
+                    title: classes.title,
+                    subtitle: classes.subtitle,
+                  }}
+                  actionIcon={
+                    <div>
+                      <IconButton
+                        href={"#/app/" + configuration.id}
+                        className={classes.subtitle}
+                      >
+                        <LaunchIcon color="primary" />
+                      </IconButton>
+                      <IconButton
+                        onClick={(event: any) => openMenu(event, configuration)}
+                        className={classes.subtitle}
+                      >
+                        <MoreVertIcon color="secondary" />
+                      </IconButton>
+                    </div>
+                  }
+                />
+              </GridListTile>
+            );
+          })}
       </GridList>
 
       <Menu
@@ -232,14 +265,28 @@ const ConfigurationList: React.FC<WithWidthProps> = (properties: WithWidthProps)
         open={Boolean(menuAnchor?.target)}
         onClose={closeMenu}
       >
-        <MenuItem onClick={() => editConfiguration(menuAnchor.configuration)}>Edit</MenuItem>
-        <MenuItem onClick={() => cloneConfiguration(menuAnchor.configuration)}>Clone</MenuItem>
-        <MenuItem onClick={() => deleteConfiguration(menuAnchor.configuration)}>Delete</MenuItem>
+        <MenuItem onClick={() => editConfiguration(menuAnchor.configuration)}>
+          Edit
+        </MenuItem>
+        <MenuItem onClick={() => cloneConfiguration(menuAnchor.configuration)}>
+          Clone
+        </MenuItem>
+        <MenuItem onClick={() => deleteConfiguration(menuAnchor.configuration)}>
+          Delete
+        </MenuItem>
       </Menu>
 
-      <ConfigurationForm isOpen={!!isDialogOpen} onClose={closeDialog} id={(isDialogOpen as Configuration).id} />
+      <ConfigurationForm
+        isOpen={!!isDialogOpen}
+        onClose={closeDialog}
+        id={(isDialogOpen as Configuration).id}
+      />
 
-      <Fab color="primary" className={classes.floatingButton} onClick={() => openDialog()}>
+      <Fab
+        color="primary"
+        className={classes.floatingButton}
+        onClick={() => openDialog()}
+      >
         <AddIcon />
       </Fab>
     </div>
