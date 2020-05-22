@@ -1,4 +1,4 @@
-import React, {useState, ChangeEvent, useEffect} from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import {
   makeStyles,
   FormControl,
@@ -6,7 +6,7 @@ import {
   MenuItem,
   InputLabel,
   Toolbar,
-  Theme
+  Theme,
 } from "@material-ui/core";
 
 interface QueryPanelSettingsProperties {
@@ -16,22 +16,23 @@ interface QueryPanelSettingsProperties {
   onContainerSelected: (databaseId: string) => void;
 }
 
-const useStyles: any = makeStyles((theme: Theme) =>
-  ({
-    formControl: {
-      width: "200px",
-      marginRight: theme.spacing(1)
-    }
-  })
-);
+const useStyles: any = makeStyles((theme: Theme) => ({
+  formControl: {
+    width: "200px",
+    marginRight: theme.spacing(1),
+  },
+}));
 
-const QueryPanelSettings: React.FC<QueryPanelSettingsProperties> = (properties: QueryPanelSettingsProperties) => {
+const QueryPanelSettings: React.FC<QueryPanelSettingsProperties> = (
+  properties: QueryPanelSettingsProperties
+) => {
   const classes: any = useStyles();
 
   const [containerId, setContainerId] = useState("");
+  const [databaseId, setDatabaseId] = useState(properties.databaseIds[0] || "");
 
   const onContainerIdChanged = async (
-    event: React.ChangeEvent<{value: string}>
+    event: React.ChangeEvent<{ value: string }>
   ): Promise<void> => {
     const selectedContainerId: string = event.target.value;
 
@@ -41,15 +42,30 @@ const QueryPanelSettings: React.FC<QueryPanelSettingsProperties> = (properties: 
     }
   };
 
+  const onDatabaseIdChanged = async (
+    event: React.ChangeEvent<{ value: string }>
+  ): Promise<void> => {
+    const selecteddatabaseId: string = event.target.value;
+
+    if (databaseId !== selecteddatabaseId) {
+      properties.onDatabaseSelected(selecteddatabaseId);
+      setDatabaseId(selecteddatabaseId);
+    }
+  };
+
   return (
     <Toolbar id="tool-bar" className={classes.toolbar}>
-      <FormControl className={classes.formControl} variant="filled" size="small">
+      <FormControl
+        className={classes.formControl}
+        variant="filled"
+        size="small"
+      >
         <InputLabel id="database-input-label">Database</InputLabel>
         <Select
           labelId="database-input-label"
           id="database-select"
-          value={properties.databaseIds[0] || ""}
-          onChange={(event: ChangeEvent<{value: string}>) => properties.onDatabaseSelected(event.target.value)}
+          value={databaseId}
+          onChange={onDatabaseIdChanged}
           disabled={!(properties.databaseIds && properties.databaseIds.length)}
         >
           {properties.databaseIds.map((database: string) => {
@@ -62,14 +78,20 @@ const QueryPanelSettings: React.FC<QueryPanelSettingsProperties> = (properties: 
         </Select>
       </FormControl>
 
-      <FormControl className={classes.formControl} variant="filled" size="small">
+      <FormControl
+        className={classes.formControl}
+        variant="filled"
+        size="small"
+      >
         <InputLabel id="container-input-label">Container</InputLabel>
         <Select
           labelId="container-input-label"
           id="container-select"
           value={containerId}
           onChange={onContainerIdChanged}
-          disabled={!(properties.containerIds && properties.containerIds.length)}
+          disabled={
+            !(properties.containerIds && properties.containerIds.length)
+          }
         >
           {properties.containerIds.map((container: string) => {
             return (
