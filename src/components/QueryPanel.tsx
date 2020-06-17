@@ -1,71 +1,85 @@
 import * as React from "react";
-import {makeStyles, Fab, Theme, Drawer, Button, Divider} from "@material-ui/core";
+import {
+  makeStyles,
+  Fab,
+  Theme,
+  Drawer,
+  Button,
+  Divider,
+} from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 
-
-import {useEffect, useState, useCallback} from "react";
+import { useEffect, useState, useCallback } from "react";
 import prettier from "prettier";
-import {useParams} from "react-router-dom";
-import {Environment} from "src/environment";
-import {CosmosClient, CosmosDatabaseClient, GremlinClient, GremlinClientFactory} from "src/cosmos";
-import {Configuration} from "src/models";
-import {QueryPanelSettings, QueryResponse, QueryEditor, TitleBar, AccordionDivider, QueryPanelStatusBar} from "src/components";
+import { useParams } from "react-router-dom";
+import { Environment } from "src/environment";
+import {
+  CosmosClient,
+  CosmosDatabaseClient,
+  GremlinClient,
+  GremlinClientFactory,
+} from "src/cosmos";
+import { Configuration } from "src/models";
+import {
+  QueryPanelSettings,
+  QueryResponse,
+  QueryEditor,
+  TitleBar,
+  AccordionDivider,
+  QueryPanelStatusBar,
+} from "src/components";
 
-const useStyles: any = makeStyles((theme: Theme) =>
-  ({
-    grid: {display: "flex", flexDirection: "column", height: "100vh"},
-    top: {
-      display: "flex",
-      justifyContent: "space-between",
-      borderBottom: "1px solid",
-      borderBottomColor: theme.palette.divider
-    },
-    topLeft: {
-    },
-    topRight: {
-      display: "flex",
-      alignItems: "center"
-    },
-    actionsContainer: {
-      paddingRight: theme.spacing(3),
-      paddingLeft: theme.spacing(2)
-    },
-    drawer: {
-      width: "100vw",
-      height: "50vh",
-      overflow: "hidden"
-    },
-    bottom: {flex: 1, overflow: "hidden"},
-    editorContainer: {},
-    resultContainer: {},
-    submitContainer: {},
-    bottomContainer: {},
-    floatingButton: {
-      zIndex: 1,
-      position: "fixed",
-      bottom: "30px",
-      right: "30px"
-    }
-  })
-);
+const useStyles: any = makeStyles((theme: Theme) => ({
+  grid: { display: "flex", flexDirection: "column", height: "100vh" },
+  top: {
+    display: "flex",
+    justifyContent: "space-between",
+    borderBottom: "1px solid",
+    borderBottomColor: theme.palette.divider,
+  },
+  topLeft: {},
+  topRight: {
+    display: "flex",
+    alignItems: "center",
+  },
+  actionsContainer: {
+    paddingRight: theme.spacing(3),
+    paddingLeft: theme.spacing(2),
+  },
+  drawer: {
+    width: "100vw",
+    height: "50vh",
+    overflow: "hidden",
+  },
+  bottom: { flex: 1, overflow: "hidden" },
+  editorContainer: {},
+  resultContainer: {},
+  submitContainer: {},
+  bottomContainer: {},
+  floatingButton: {
+    zIndex: 1,
+    position: "fixed",
+    bottom: "30px",
+    right: "30px",
+  },
+}));
 
 const prettify = (json: string): string => {
   const prettifiedJson: string = prettier.format(json, {
-    quoteProps: "as-needed"
+    quoteProps: "as-needed",
   });
 
   return prettifiedJson;
 };
 
 const QueryPanel: React.FC = () => {
-  const params: {id?: string} = useParams();
+  const params: { id?: string } = useParams();
   const defaultQueryValue: string = "g.V().limit(1)";
   const classes: any = useStyles();
 
-  const settings: Configuration =
-    Environment.instance.configurations.find(
-      (c: Configuration) => c.id === params.id
-    );
+  const settings: Configuration = Environment.instance.configurations.find(
+    (c: Configuration) => c.id === params.id
+  );
 
   const [databaseIds, setDatabaseIds] = useState([]);
   const [containerIds, setContainerIds] = useState([]);
@@ -94,6 +108,7 @@ const QueryPanel: React.FC = () => {
     console.log("main useEffect()");
 
     const cosmosClient: CosmosClient = new CosmosClient(
+      settings.cosmos.protocol,
       settings.cosmos.hostname,
       settings.cosmos.port,
       settings.key
@@ -110,9 +125,10 @@ const QueryPanel: React.FC = () => {
           onDatabaseSelected(databaseIds[0]);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         onError(err);
-      }).finally(() => {
+      })
+      .finally(() => {
         setStatusText(null);
       });
 
@@ -128,6 +144,7 @@ const QueryPanel: React.FC = () => {
       }
 
       const databaseClient: CosmosDatabaseClient = new CosmosDatabaseClient(
+        settings.cosmos.protocol,
         settings.cosmos.hostname,
         settings.cosmos.port,
         settings.key,
@@ -196,7 +213,7 @@ const QueryPanel: React.FC = () => {
         await gremlinClient.open();
       }
 
-      const response: {_items: any[]} = await gremlinClient.execute(
+      const response: { _items: any[] } = await gremlinClient.execute(
         queryText
       );
 
@@ -235,7 +252,9 @@ const QueryPanel: React.FC = () => {
               color="primary"
               onClick={onExecute}
               disabled={!(gremlinClient && queryText)}
-            >Execute</Button>
+            >
+              Execute
+            </Button>
           </div>
         </div>
       </div>
@@ -243,15 +262,20 @@ const QueryPanel: React.FC = () => {
       <div className={classes.bottom} id="bottomContainer">
         <QueryEditor
           defaultValue={defaultQueryValue}
-          onChange={(val: string) => {setQueryText(val)}}
+          onChange={(val: string) => {
+            setQueryText(val);
+          }}
         />
       </div>
 
-      {(queryResult || errorText) &&
+      {(queryResult || errorText) && (
         <div>
-          <AccordionDivider direction="up" onClick={() => setIsDrawerOpen(true)} />
+          <AccordionDivider
+            direction="up"
+            onClick={() => setIsDrawerOpen(true)}
+          />
         </div>
-      }
+      )}
 
       <Drawer
         variant="persistent"
@@ -260,10 +284,11 @@ const QueryPanel: React.FC = () => {
         onClose={() => setIsDrawerOpen(false)}
       >
         <div className={classes.drawer}>
-          <AccordionDivider direction="down" onClick={() => setIsDrawerOpen(false)} />
-          <QueryResponse
-            value={queryResult || errorText}
+          <AccordionDivider
+            direction="down"
+            onClick={() => setIsDrawerOpen(false)}
           />
+          <QueryResponse value={queryResult || errorText} />
         </div>
       </Drawer>
 

@@ -5,7 +5,7 @@ import {
   SqlQuerySpec,
   RequestOptions,
   ContainerDefinition,
-  FeedResponse
+  FeedResponse,
 } from "@azure/cosmos";
 import https from "https";
 
@@ -13,19 +13,20 @@ export class CosmosDatabaseClient {
   private database: Database;
 
   constructor(
+    protocol: string,
     hostname: string,
     port: number,
     key: string,
     databaseName: string
   ) {
-    const endpoint: string = `https://${hostname}:${port}`;
+    const endpoint: string = `${protocol}://${hostname}:${port}`;
 
     const clientOptions: CosmosClientOptions = {
       endpoint: endpoint,
       key: key,
       agent: new https.Agent({
-        rejectUnauthorized: false
-      })
+        rejectUnauthorized: false,
+      }),
     };
 
     const client: AzureCosmosClient = new AzureCosmosClient(clientOptions);
@@ -42,7 +43,7 @@ export class CosmosDatabaseClient {
 
   public async getContainers(): Promise<string[]> {
     const query: SqlQuerySpec = {
-      query: "select value a.id from a"
+      query: "select value a.id from a",
     };
 
     const queryResult: FeedResponse<any> = await this.database.containers
@@ -62,10 +63,10 @@ export class CosmosDatabaseClient {
     await this.database.containers.create(
       {
         id: id,
-        partitionKey: { paths: [`/${partitionKey}`], kind: "Hash" }
+        partitionKey: { paths: [`/${partitionKey}`], kind: "Hash" },
       } as ContainerDefinition,
       {
-        offerThroughput: throughput
+        offerThroughput: throughput,
       } as RequestOptions
     );
   }
@@ -79,7 +80,7 @@ export class CosmosDatabaseClient {
       : `select * from c`;
 
     const query: SqlQuerySpec = {
-      query: `${sqlQuery}`
+      query: `${sqlQuery}`,
     };
 
     try {
@@ -100,7 +101,7 @@ export class CosmosDatabaseClient {
         and (c._vertexLabel = '${vertexLabel}' or c._sinkLabel = '${vertexLabel}')`;
 
     const query: SqlQuerySpec = {
-      query: `${sqlQuery}`
+      query: `${sqlQuery}`,
     };
 
     try {

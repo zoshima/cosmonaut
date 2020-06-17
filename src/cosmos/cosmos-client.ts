@@ -14,8 +14,8 @@ export class CosmosClient {
   private _key: string;
   private _port: number;
 
-  constructor(hostname: string, port: number, key: string) {
-    this._endpoint = `https://${hostname}:${port}/`;
+  constructor(protocol: string, hostname: string, port: number, key: string) {
+    this._endpoint = `${protocol}://${hostname}:${port}/`;
     this._key = key;
     this._hostname = hostname;
     this._port = port;
