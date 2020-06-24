@@ -231,7 +231,8 @@ const QueryPanel: React.FC = () => {
 
       setQueryResult(prettify(responseString));
       setStatusText(
-        "RU: " + response.attributes["x-ms-total-request-charge"].toFixed(2)
+        "Request charge: " +
+          response.attributes["x-ms-total-request-charge"].toFixed(2)
       );
     } catch (err) {
       onError(err);
