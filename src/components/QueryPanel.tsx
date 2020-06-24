@@ -220,18 +220,24 @@ const QueryPanel: React.FC = () => {
         executionProfileEnabled ? ".executionProfile()" : ""
       }`;
 
-      const response: { _items: any[] } = await gremlinClient.execute(query);
+      const response: {
+        _items: any[];
+        attributes: { "x-ms-total-request-charge": number };
+      } = await gremlinClient.execute(query);
 
       responseJson = response._items;
 
       const responseString: string = JSON.stringify(responseJson);
 
       setQueryResult(prettify(responseString));
+      setStatusText(
+        "RU: " + response.attributes["x-ms-total-request-charge"].toFixed(2)
+      );
     } catch (err) {
       onError(err);
+      setStatusText(null);
     } finally {
       setIsDrawerOpen(true);
-      setStatusText(null);
     }
   };
 
