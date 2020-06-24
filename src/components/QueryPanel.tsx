@@ -120,10 +120,6 @@ const QueryPanel: React.FC = () => {
       .getDatabases()
       .then((databaseIds: string[]) => {
         setDatabaseIds(databaseIds);
-
-        if (databaseIds.length) {
-          onDatabaseSelected(databaseIds[0]);
-        }
       })
       .catch((err) => {
         onError(err);

@@ -29,7 +29,7 @@ const QueryPanelSettings: React.FC<QueryPanelSettingsProperties> = (
   const classes: any = useStyles();
 
   const [containerId, setContainerId] = useState("");
-  const [databaseId, setDatabaseId] = useState(properties.databaseIds[0] || "");
+  const [databaseId, setDatabaseId] = useState("");
 
   const onContainerIdChanged = async (
     event: React.ChangeEvent<{ value: string }>
