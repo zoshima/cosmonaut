@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState } from "react";
 import {
   makeStyles,
   FormControl,
@@ -7,13 +7,16 @@ import {
   InputLabel,
   Toolbar,
   Theme,
+  FormControlLabel,
+  Switch,
 } from "@material-ui/core";
 
 interface QueryPanelSettingsProperties {
   databaseIds: string[];
   containerIds: string[];
   onDatabaseSelected: (databaseId: string) => void;
-  onContainerSelected: (databaseId: string) => void;
+  onContainerSelected: (containerId: string) => void;
+  onExecutionProfileToggled: (isChecked: boolean) => void;
 }
 
 const useStyles: any = makeStyles((theme: Theme) => ({
@@ -51,6 +54,13 @@ const QueryPanelSettings: React.FC<QueryPanelSettingsProperties> = (
       properties.onDatabaseSelected(selecteddatabaseId);
       setDatabaseId(selecteddatabaseId);
     }
+  };
+
+  const onExecutionProfileToggled = async (
+    _event: never,
+    isChecked: boolean
+  ): Promise<void> => {
+    properties.onExecutionProfileToggled(isChecked);
   };
 
   return (
@@ -102,6 +112,13 @@ const QueryPanelSettings: React.FC<QueryPanelSettingsProperties> = (
           })}
         </Select>
       </FormControl>
+
+      <FormControlLabel
+        control={
+          <Switch color="primary" onChange={onExecutionProfileToggled} />
+        }
+        label="Execution profile"
+      />
     </Toolbar>
   );
 };

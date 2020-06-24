@@ -91,6 +91,7 @@ const QueryPanel: React.FC = () => {
   const [errorText, setErrorText] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [statusText, setStatusText] = useState(null);
+  const [executionProfileEnabled, setExecutionProfileEnabled] = useState(false);
 
   const onError = useCallback((err: any): void => {
     console.error(err);
@@ -197,6 +198,12 @@ const QueryPanel: React.FC = () => {
     }
   };
 
+  const onExecutionProfileToggled = async (
+    isChecked: boolean
+  ): Promise<void> => {
+    setExecutionProfileEnabled(isChecked);
+  };
+
   const onExecute = async (): Promise<void> => {
     setStatusText("querying");
     setErrorText(null);
@@ -209,9 +216,11 @@ const QueryPanel: React.FC = () => {
         await gremlinClient.open();
       }
 
-      const response: { _items: any[] } = await gremlinClient.execute(
-        queryText
-      );
+      const query = `${queryText}${
+        executionProfileEnabled ? ".executionProfile()" : ""
+      }`;
+
+      const response: { _items: any[] } = await gremlinClient.execute(query);
 
       responseJson = response._items;
 
@@ -237,6 +246,7 @@ const QueryPanel: React.FC = () => {
             containerIds={containerIds}
             onDatabaseSelected={onDatabaseSelected}
             onContainerSelected={onContainerSelected}
+            onExecutionProfileToggled={onExecutionProfileToggled}
           />
         </div>
 
