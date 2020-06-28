@@ -11,6 +11,10 @@ namespace gremlinFormatter {
 
   const indentedSteps: string[] = [
     "where",
+  ];
+
+  const indentingSteps: string[] = [
+    "project",
     "in",
     "out",
     "inV",
@@ -18,8 +22,6 @@ namespace gremlinFormatter {
     "inE",
     "outE",
   ];
-
-  const indentingSteps: string[] = ["project", "order"];
 
   const scopedSteps: string[] = ["where", "coalesce", "map"];
 
