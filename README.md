@@ -13,6 +13,12 @@ When connected to a profile, queries are written in Monaco Editor, and output is
 
 ![Profile form](screenshots/app-view-2.png)
 
+### Formatting
+Cosmonaut now also includes a build-in makeshift formatter, which is still work in progress.
+
+![Formatting](screenshots/formatting-raw.png)
+![Formatting](screenshots/formatting-formatted.png)
+
 ## Installation
 
 Run ``yarn`` to download the dependencies, ``yarn build`` to build the project and ``yarn electron`` to start the application.
