@@ -1,4 +1,5 @@
 import * as React from "react";
+import { gremlinFormatter } from "../gremlin/formatter";
 import {
   makeStyles,
   Fab,
@@ -44,7 +45,10 @@ const useStyles: any = makeStyles((theme: Theme) => ({
   },
   actionsContainer: {
     paddingRight: theme.spacing(3),
-    paddingLeft: theme.spacing(2),
+    paddingLeft: theme.spacing(3),
+  },
+  formatButton: {
+    marginRight: theme.spacing(1)
   },
   drawer: {
     width: "100vw",
@@ -204,6 +208,14 @@ const QueryPanel: React.FC = () => {
     setExecutionProfileEnabled(isChecked);
   };
 
+  const onFormat = async (): Promise<void> => {
+    const formattedQuery = gremlinFormatter.format(queryText);
+
+    console.log(formattedQuery);
+
+    setQueryText(formattedQuery);
+  };
+
   const onExecute = async (): Promise<void> => {
     setStatusText("querying");
     setErrorText(null);
@@ -218,7 +230,7 @@ const QueryPanel: React.FC = () => {
 
       const query = `${queryText}${
         executionProfileEnabled ? ".executionProfile()" : ""
-      }`;
+        }`;
 
       const response: {
         _items: any[];
@@ -232,7 +244,7 @@ const QueryPanel: React.FC = () => {
       setQueryResult(prettify(responseString));
       setStatusText(
         "Request charge: " +
-          response.attributes["x-ms-total-request-charge"].toFixed(2)
+        response.attributes["x-ms-total-request-charge"].toFixed(2)
       );
     } catch (err) {
       onError(err);
@@ -261,6 +273,16 @@ const QueryPanel: React.FC = () => {
           <Divider orientation="vertical" flexItem />
           <div className={classes.actionsContainer}>
             <Button
+              className={classes.formatButton}
+              variant="contained"
+              color="secondary"
+              onClick={onFormat}
+              disabled={!(queryText)}
+            >
+              Format
+            </Button>
+
+            <Button
               variant="contained"
               color="primary"
               onClick={onExecute}
@@ -275,6 +297,7 @@ const QueryPanel: React.FC = () => {
       <div className={classes.bottom} id="bottomContainer">
         <QueryEditor
           defaultValue={defaultQueryValue}
+          value={queryText}
           onChange={(val: string) => {
             setQueryText(val);
           }}
