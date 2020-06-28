@@ -15,7 +15,7 @@ module.exports = [
         {
           test: /\.ts$/,
           include: /src/,
-          use: [{ loader: "ts-loader" }]
+          use: [{loader: "ts-loader"}]
         }
       ]
     },
@@ -35,7 +35,7 @@ module.exports = [
         {
           test: /\.ts(x?)$/,
           include: /src/,
-          use: [{ loader: "ts-loader" }]
+          use: [{loader: "ts-loader"}]
         },
         {
           test: /\.css$/,
@@ -54,7 +54,7 @@ module.exports = [
     resolve: {
       extensions: [".ts", ".tsx", ".js"],
       plugins: [
-        new TsconfigPathsPlugin({ configFile: "./tsconfig.json" })
+        new TsconfigPathsPlugin({configFile: "./tsconfig.json"})
       ]
     },
     plugins: [
@@ -62,7 +62,7 @@ module.exports = [
         template: "./index.html"
       }),
       new MonacoWebpackPlugin({
-        languages: ["json", "groovy"]
+        languages: ["json", "javascript"]
       }),
       new CopyWebpackPlugin([
         {
