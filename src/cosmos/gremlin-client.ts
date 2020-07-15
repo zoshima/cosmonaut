@@ -69,7 +69,7 @@ export class GremlinClient {
       authenticator,
       traversalsource: "g",
       rejectUnauthorized: false,
-      mimeType: "application/vnd.gremlin-v2.0+json"
+      mimeType: "application/vnd.gremlin-v2.0+json",
     });
   }
 
@@ -101,6 +101,8 @@ export class GremlinClient {
 
   public async execute(query: string): Promise<any> {
     const results: any = await this.client.submit(query, {});
+
+    console.log(results);
 
     return results;
   }
